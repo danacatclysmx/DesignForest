@@ -318,7 +318,7 @@ body {
 
 /* Menú lateral */
 .sidebar {
-  position: fixed; /* Posición fija */
+  /*position: fixed; /* Posición fija */
   top: 0; /* Desde arriba */
   left: -250px; /* Oculto inicialmente */
   width: 250px; /* Ancho del menú */

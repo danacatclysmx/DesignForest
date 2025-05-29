@@ -1,0 +1,43 @@
+<!-- conglomerado-card.component.html -->
+<div 
+  class="conglomerado" 
+  [attr.data-status]="conglomerado.estado" 
+  [attr.data-id]="conglomerado.id"
+>
+  <div class="options-menu">
+    <button class="options-button" (click)="toggleOptionsMenu($event)">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </button>
+    <div class="options-dropdown">
+      <div class="option-item" (click)="editConglomerado()">EDITAR</div>
+      <div class="option-item" (click)="deleteConglomerado()">ELIMINAR</div>
+      <div class="option-item" (click)="showDetails()">VER DETALLES</div>
+    </div>
+  </div>
+
+  <div class="conglomerado-id">{{ conglomerado.id }}</div>
+
+  <div class="conglomerado-info">
+    <strong>Ubicación:</strong> Departamento: {{ conglomerado.departamento }},
+    Municipio: {{ conglomerado.municipio }}
+    @if (conglomerado.corregimiento) {
+        , Corregimiento: {{ conglomerado.corregimiento }}
+    }
+  </div>
+
+  <div class="conglomerado-info">
+    <strong>Coordenadas Centro:</strong> {{ conglomerado.coordenadas_centro }}
+  </div>
+
+  <div class="conglomerado-info">
+    <strong>Fecha Inicio:</strong> {{ conglomerado.fecha_inicio }} - 
+    <strong>Fecha Fin:</strong> {{ conglomerado.fecha_finalizacion }}
+  </div>
+
+  <div class="conglomerado-info">
+    <strong>Estado:</strong> 
+    <div class="estado-badge">{{ toUpperCase(conglomerado.estado) }}</div>
+  </div>
+</div>
