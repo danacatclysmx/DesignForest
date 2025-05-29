@@ -1,22 +1,33 @@
-// src/app/login/login.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username = '';
-  password = '';
+  logoUrl = 'assets/logo.png';
+  backgroundUrl = 'assets/Bosque.jpg';
 
-  login() {
-    console.log('Login clicked:', this.username);
-    // Lógica de autenticación aquí
+  isRightPanelActive: boolean = false;
+  username: string = '';
+  password: string = '';
+  errorMessage: string = '';
+
+  togglePanel(): void {
+    this.isRightPanelActive = !this.isRightPanelActive;
+  }
+
+  login(): void {
+    if (this.username === 'admin' && this.password === '1234') {
+      this.errorMessage = '';
+      console.log('Login exitoso');
+    } else {
+      this.errorMessage = 'Credenciales incorrectas';
+    }
   }
 }

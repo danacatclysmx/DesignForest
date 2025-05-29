@@ -6,8 +6,13 @@ import { JefeComponent } from './jefe/jefe.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [JefeComponent],
-  template: `<app-jefe></app-jefe>`
+  imports: [
+    LoginComponent // Agrega LoginComponent aquí
+],
+  /*imports: [JefeComponent],
+  template: `<app-jefe></app-jefe>`,*/
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'desig-Forest';

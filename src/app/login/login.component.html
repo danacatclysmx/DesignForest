@@ -1,36 +1,85 @@
+<div class="background-container"></div>
 <div class="login-container">
   <div class="background-overlay"></div>
-  <div class="login-box">
-    <h1 class="title">🌿 Forest Track</h1>
-
-    <!-- Aquí va el logo -->
-    <div class="logo-space">
-      <!-- Puedes colocar una imagen real en src -->
-      <img src="/assets/logo.png" alt="Forest Track Logo" />
+  
+  <div class="container" [ngClass]="{'right-panel-active': isRightPanelActive}">
+    <!-- Formulario de solicitud de cuenta -->
+    <div class="form-container sign-up-container">
+      <form>
+        <h1>Pide Tu cuenta</h1>
+        
+        <div class="infield">
+          <input type="text" placeholder="Nombre" />
+          <label></label>
+        </div>
+        
+        <div class="infield">
+          <input type="text" placeholder="Cargo" />
+          <label></label>
+        </div>
+        
+        <div class="infield">
+          <input type="email" placeholder="Correo" name="email" />
+          <label></label>
+        </div>
+        
+        <button class="styles_button">Pidela</button>
+      </form>
     </div>
 
-    <p class="subtitle">Ayudando al IDEAM con cada muestra</p>
+    <!-- Formulario de inicio de sesión -->
+    <div class="form-container sign-in-container">
+      <form (ngSubmit)="login()">
+        <h1>Iniciar sesión</h1>
+        
+        <div class="infield">
+          <input 
+            id="username"
+            type="text"
+            [(ngModel)]="username"
+            name="username"
+            placeholder="Usuario"
+            required
+          />
+          <label></label>
+        </div>
+        
+        <div class="infield">
+          <input 
+            id="password"
+            type="password"
+            [(ngModel)]="password"
+            name="password"
+            placeholder="Contraseña"
+            required
+          />
+          <label></label>
+        </div>
+        
+        <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
+        <button type="submit" class="styles_button">Acceder</button>
+        <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+      </form>
+    </div>
 
-    <form (ngSubmit)="login()">
-      <label for="username">Usuario</label>
-      <input
-        id="username"
-        type="text"
-        [(ngModel)]="username"
-        name="username"
-        required
-      />
-
-      <label for="password">Contraseña</label>
-      <input
-        id="password"
-        type="password"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
-
-      <button type="submit">Ingresar</button>
-    </form>
+    <!-- Sección Overlay -->
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h1>FOREST TRACK</h1>
+          <p><strong>Accede a tu cuenta</strong> y sigue donde lo dejaste.</p>
+          <button (click)="togglePanel()">Acceder</button>
+        </div>
+        
+        <div class="overlay-panel overlay-right">
+          <div class="logo-space">
+            <img [src]="logoUrl" alt="Forest Track Logo" />
+          </div>
+          <p>¿No te han dado tu usuario?, <strong>Pídelo ahora!</strong></p>
+          <button (click)="togglePanel()">Pídelo</button>
+        </div>
+      </div>
+      <button id="overlayBtn" (click)="togglePanel()"></button>
+    </div>
   </div>
 </div>
