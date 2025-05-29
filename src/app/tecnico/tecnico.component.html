@@ -1,0 +1,91 @@
+// tecnico.component.ts
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  standalone: true,
+  selector: 'app-tecnico',
+  imports: [CommonModule],
+  template: `
+    <div class="container">
+      <!-- Botón de menú hamburguesa -->
+      <button class="menu-toggle" [class.open]="sidebarOpen()" (click)="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- Overlay -->
+      <div class="overlay" [class.open]="sidebarOpen()" (click)="sidebarOpen.set(false)"></div>
+
+      <!-- Menú lateral -->
+      <div class="sidebar" [class.open]="sidebarOpen()">
+        <div class="sidebar-header">
+          <h2 class="sidebar-title">Menú</h2>
+        </div>
+        <ul class="sidebar-menu">
+          <li class="menu-item" [class.active]="currentSection() === 'conglomerados'" (click)="selectSection('conglomerados')">
+            <i class="fas fa-list"></i><span>Conglomerados</span>
+          </li>
+          <li class="menu-item" [class.active]="currentSection() === 'muestras'" (click)="selectSection('muestras')">
+            <i class="fas fa-vial"></i><span>Muestras</span>
+          </li>
+          <li class="menu-item" [class.active]="currentSection() === 'rutas'" (click)="selectSection('rutas')">
+            <i class="fas fa-route"></i><span>Rutas de Muestreo</span>
+          </li>
+          <li class="menu-item" [class.active]="currentSection() === 'papelera'" (click)="selectSection('papelera')">
+            <i class="fas fa-trash"></i><span>Papelera</span>
+          </li>
+          <li class="menu-item">
+            <i class="fas fa-sign-out-alt"></i><span><a routerLink="/login" style="text-decoration: none; color: inherit">Cerrar Sesión</a></span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Título principal -->
+    <h1>{{ title }}</h1>
+
+<div *ngIf="currentSection() === 'conglomerados'">
+  <p>Sección de Conglomerados</p>
+</div>
+
+<div *ngIf="currentSection() === 'muestras'">
+  <p>Sección de Muestras</p>
+</div>
+
+
+      <div *ngIf="currentSection() === 'rutas'">
+        <!-- Aquí irá el contenido de rutas -->
+        <p>Sección de Rutas</p>
+      </div>
+
+      <div *ngIf="currentSection() === 'papelera'">
+        <!-- Aquí irá el contenido de la papelera -->
+        <p>Sección de Papelera</p>
+      </div>
+    </div>
+  `,  
+  styleUrls: ['./tecnico.component.css']
+})
+export class TecnicoComponent {
+  currentSection = signal<'conglomerados' | 'muestras' | 'rutas' | 'papelera'>('conglomerados');
+  sidebarOpen = signal(false);
+
+  toggleSidebar() {
+    this.sidebarOpen.update(v => !v);
+  }
+
+  selectSection(section: 'conglomerados' | 'muestras' | 'rutas' | 'papelera') {
+    this.currentSection.set(section);
+    this.sidebarOpen.set(false);
+  }
+
+  get title() {
+    switch (this.currentSection()) {
+      case 'muestras': return 'MUESTRAS';
+      case 'rutas': return 'RUTAS DE MUESTREO';
+      case 'papelera': return 'PAPELERA';
+      default: return 'CONGLOMERADOS';
+    }
+  }
+}
