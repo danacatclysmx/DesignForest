@@ -1,51 +1,41 @@
-/* Mantener variables existentes */
-:root {
-  --verde-bosque: #4B7B4F;
-  --marron-tierra: #6B4C3B;
-  --beige: #F5F0E6;
-  --verde-claro: #A8C7A1;
-  --linear-grad: linear-gradient(to right, var(--verde-bosque), var(--verde-bosque));
+/* Importa la fuente 'Poppins' desde Google Fonts con diferentes grosores */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+/* Aplica un reset general */
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
 }
 
-/* Estilos base existentes */
-.login-container {
-  width: 100%;
+/* Define variables CSS reutilizables */
+:host {
+  --linear-grad: linear-gradient(to right, #7db352, #7db352);
+  --grad-clr1: #7db352;
+  --grad-clr2: #7db352;
+}
+
+/* Estilos generales del body del login */
+.class_body_login {
   height: 100vh;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-image: url('/assets/Bosque.jpg');
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
+  background: #ffffff;
+  display: grid;
+  place-content: center;
+  font-family: "Poppins", sans-serif;
 }
 
-.background-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 0;
-}
-
-/* Contenedor principal nuevo */
+/* Contenedor principal del formulario login/registro */
 .container {
   position: relative;
   width: 850px;
   height: 500px;
-  background-color: white;
-  box-shadow: 25px 30px 55px rgba(85, 85, 119, 0.3);
+  background-color: #ffffff;
+  box-shadow: 25px 30px 55px #5557;
   border-radius: 13px;
   overflow: hidden;
-  z-index: 1;
 }
 
-/* Form containers */
+/* Contenedor del formulario */
 .form-container {
   position: absolute;
   width: 60%;
@@ -54,16 +44,18 @@
   transition: all 0.6s ease-in-out;
 }
 
+/* Contenedor del formulario de registro */
 .sign-up-container {
   opacity: 0;
   z-index: 1;
 }
 
+/* Contenedor del formulario de login */
 .sign-in-container {
   z-index: 2;
 }
 
-/* Form elements */
+/* Estilos generales de los formularios */
 form {
   height: 100%;
   display: flex;
@@ -73,32 +65,28 @@ form {
   padding: 0px 50px;
 }
 
+/* Títulos dentro del formulario */
 h1 {
-  color: var(--verde-bosque);
-  font-size: 2.2rem;
+  color: #7db352;
 }
 
+/* Contenedor individual para cada campo de input */
 .infield {
   position: relative;
   margin: 8px 0px;
   width: 100%;
 }
 
+/* Campos de entrada (input) */
 input {
   width: 100%;
   padding: 12px 8px;
   background-color: #f3f3f3;
   border: none;
   outline: none;
-  border-radius: 6px;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-input:focus {
-  border: 1px solid var(--verde-bosque);
-}
-
+/* Línea de efecto debajo del input */
 label {
   position: absolute;
   left: 50%;
@@ -106,15 +94,11 @@ label {
   transform: translateX(-50%);
   width: 0%;
   height: 2px;
-  background: var(--linear-grad);
+  background: linear-gradient(to right, #7db352, #7db352);
   transition: 0.3s;
 }
 
-input:focus ~ label {
-  width: 100%;
-}
-
-/* Links and buttons */
+/* Estilo de todos los enlaces */
 a {
   color: #333;
   font-size: 14px;
@@ -122,37 +106,69 @@ a {
   margin: 15px 0px;
 }
 
+/* Estilo específico para el enlace "¿Olvidaste tu contraseña?" */
 a.forgot {
   padding-bottom: 3px;
   border-bottom: 2px solid #eee;
 }
 
+/* Efecto hover para el enlace de contraseña */
 .forgot:hover {
-  color: var(--marron-tierra);
+  color: #f7efde;
 }
 
+/* Botones principales del formulario */
 .styles_button {
   border-radius: 20px;
-  border: 1px solid var(--verde-bosque);
-  background: var(--verde-bosque);
-  color: white;
-  font-size: 1rem;
+  border: 1px solid #7db352;
+  background: #7db352;
+  color: #fff;
+  font-size: 12px;
   font-weight: bold;
   padding: 12px 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
+/* Hover de los botones */
 .styles_button:hover {
-  background-color: var(--marron-tierra);
+  background: #e9dcbd;
   transform: translateY(-2px);
 }
 
+/* Botones dentro de los formularios */
 .form-container button {
   margin-top: 17px;
+  transition: 80ms ease-in;
 }
 
-/* Overlay styles */
+/* Hover corregido para botones de formulario */
+.form-container button:hover {
+  background: #fff;
+  color: #7db352;
+}
+
+/* Mensajes de error */
+.error {
+  color: #ff4444;
+  font-size: 14px;
+  margin: 10px 0;
+  text-align: center;
+  min-height: 20px;
+}
+
+/* Estilo de imagen/logo */
+.logo {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: 0 auto;
+  margin-top: -150px;
+}
+
+/* Contenedor del overlay */
 .overlay-container {
   position: absolute;
   top: 0;
@@ -164,6 +180,7 @@ a.forgot {
   z-index: 9;
 }
 
+/* Botón que activa la transición del overlay */
 #overlayBtn {
   cursor: pointer;
   position: absolute;
@@ -177,13 +194,17 @@ a.forgot {
   border-radius: 20px;
 }
 
+/* Hover en el botón de overlay */
 #overlayBtn:hover {
+  filter: brightness(90%);
   background: rgba(20, 30, 48, 0.2);
+  box-shadow: 0px 4px 10px rgba(20, 30, 48, 0.3);
 }
 
+/* Fondo del overlay */
 .overlay {
   position: relative;
-  background: var(--linear-grad);
+  background: linear-gradient(to right, #7db352, #7db352);
   color: #fff;
   left: -150%;
   height: 100%;
@@ -191,6 +212,7 @@ a.forgot {
   transition: transform 0.6s ease-in-out;
 }
 
+/* Paneles de contenido del overlay */
 .overlay-panel {
   position: absolute;
   display: flex;
@@ -204,39 +226,53 @@ a.forgot {
   transition: 0.6s ease-in-out;
 }
 
+/* Panel izquierdo */
 .overlay-left {
   right: 60%;
   transform: translateX(-12%);
 }
 
+/* Panel derecho */
 .overlay-right {
   right: 0;
   transform: translateX(0%);
 }
 
+/* Títulos de los paneles */
 .overlay-panel h1 {
-  color: #fff;
+  color: #141e30;
 }
 
-.overlay-panel p {
+/* Párrafos dentro de los paneles */
+p {
   font-size: 14px;
-  color: #fff;
-  margin: 25px 0 35px;
+  font-weight: 300;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  margin: 25px 0px 35px;
+  color: #141e30;
 }
 
+/* Botones dentro del overlay */
 .overlay-panel button {
   border: none;
   background-color: transparent;
-  color: #fff;
+  color: #000000;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   padding: 10px 20px;
   border-radius: 20px;
-  border: 1px solid #fff;
+  transition: all 0.3s ease;
 }
 
-/* Animaciones */
+/* Hover de los botones del overlay */
+.overlay-panel button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Animaciones para cambiar entre login y registro */
 .right-panel-active .overlay-container {
   transform: translateX(-150%);
 }
@@ -265,34 +301,34 @@ a.forgot {
   animation: show 0.6s;
 }
 
+/* Animación keyframes para mostrar el registro */
 @keyframes show {
-  0%, 50% {
+  0%,
+  50% {
     opacity: 0;
     z-index: 1;
   }
-  50.1%, 100% {
+  50.1%,
+  100% {
     opacity: 1;
     z-index: 5;
   }
 }
 
-/* Error message */
-.error {
-  color: #ff4444;
-  font-size: 14px;
-  margin: 10px 0;
-  text-align: center;
-  min-height: 20px;
+/* Animación especial que agranda y reduce el botón */
+.btnScaled {
+  animation: scaleBtn 0.6s;
 }
 
-/* Logo */
-.logo-space {
-  text-align: center;
-  margin: 1rem 0;
-}
-
-.logo-space img {
-  width: 80px;
-  height: auto;
-  filter: drop-shadow(2px 4px 6px #00000055);
+/* Keyframes de la animación de escala */
+@keyframes scaleBtn {
+  0% {
+    width: 143.67px;
+  }
+  50% {
+    width: 250px;
+  }
+  100% {
+    width: 143.67px;
+  }
 }

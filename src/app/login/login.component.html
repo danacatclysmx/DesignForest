@@ -1,85 +1,113 @@
-<div class="background-container"></div>
-<div class="login-container">
-  <div class="background-overlay"></div>
-  
-  <div class="container" [ngClass]="{'right-panel-active': isRightPanelActive}">
-    <!-- Formulario de solicitud de cuenta -->
+<div class="class_body_login">
+  <!-- Contenedor principal -->
+  <div class="container" #container id="container">
+    <!-- Formulario para solicitar una cuenta nueva -->
     <div class="form-container sign-up-container">
-      <form>
+      <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
         <h1>Pide Tu cuenta</h1>
-        
+
+        <!-- Campo para el nombre -->
         <div class="infield">
-          <input type="text" placeholder="Nombre" />
+          <input
+            type="text"
+            placeholder="Nombre"
+            formControlName="nombre"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
+          />
           <label></label>
         </div>
-        
+
+        <!-- Campo para el cargo -->
         <div class="infield">
-          <input type="text" placeholder="Cargo" />
+          <input
+            type="text"
+            placeholder="Cargo"
+            formControlName="cargo"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
+          />
           <label></label>
         </div>
-        
+
+        <!-- Campo para el correo electrónico -->
         <div class="infield">
-          <input type="email" placeholder="Correo" name="email" />
+          <input
+            type="email"
+            placeholder="Correo"
+            formControlName="email"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
+          />
           <label></label>
         </div>
-        
-        <button class="styles_button">Pidela</button>
+
+        <!-- Botón para solicitar la cuenta -->
+        <button class="styles_button" type="submit">Pidela</button>
       </form>
     </div>
 
     <!-- Formulario de inicio de sesión -->
     <div class="form-container sign-in-container">
-      <form (ngSubmit)="login()">
+      <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
         <h1>Iniciar sesión</h1>
-        
+
+        <!-- Campo para el usuario -->
         <div class="infield">
-          <input 
-            id="username"
+          <input
             type="text"
-            [(ngModel)]="username"
-            name="username"
-            placeholder="Usuario"
-            required
+            placeholder="usuario"
+            formControlName="usuario"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
           />
           <label></label>
         </div>
-        
+
+        <!-- Campo para la contraseña -->
         <div class="infield">
-          <input 
-            id="password"
+          <input
             type="password"
-            [(ngModel)]="password"
-            name="password"
             placeholder="Contraseña"
-            required
+            formControlName="contrasena"
+            (focus)="onInputFocus($event)"
+            (blur)="onInputBlur($event)"
           />
           <label></label>
         </div>
-        
+
+        <!-- Enlace para recuperar contraseña -->
         <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
-        <button type="submit" class="styles_button">Acceder</button>
+
+        <!-- Botón para acceder -->
+        <button class="styles_button" type="submit">Acceder</button>
+
+        <!-- Mensaje de error -->
         <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
       </form>
     </div>
 
-    <!-- Sección Overlay -->
-    <div class="overlay-container">
+    <!-- Contenedor de superposición (overlay) -->
+    <div class="overlay-container" id="overlayCon">
       <div class="overlay">
+        <!-- Panel de superposición izquierdo -->
         <div class="overlay-panel overlay-left">
           <h1>FOREST TRACK</h1>
           <p><strong>Accede a tu cuenta</strong> y sigue donde lo dejaste.</p>
-          <button (click)="togglePanel()">Acceder</button>
+          <button type="button" (click)="togglePanel()">Acceder</button>
         </div>
-        
+
+        <!-- Panel de superposición derecho -->
         <div class="overlay-panel overlay-right">
-          <div class="logo-space">
-            <img [src]="logoUrl" alt="Forest Track Logo" />
-          </div>
+          <!-- Logo de la aplicación -->
+          <img src="assets/logo.png" alt="Forest Track Logo" class="logo" />
           <p>¿No te han dado tu usuario?, <strong>Pídelo ahora!</strong></p>
-          <button (click)="togglePanel()">Pídelo</button>
+          <button type="button" (click)="togglePanel()">Pídelo</button>
         </div>
       </div>
-      <button id="overlayBtn" (click)="togglePanel()"></button>
+
+      <!-- Botón oculto para controlar el overlay -->
+      <button #overlayBtn id="overlayBtn"></button>
     </div>
   </div>
 </div>

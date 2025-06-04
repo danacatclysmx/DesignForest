@@ -1,91 +1,876 @@
-// tecnico.component.ts
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-@Component({
-  standalone: true,
-  selector: 'app-tecnico',
-  imports: [CommonModule],
-  template: `
-    <div class="container">
-      <!-- Botón de menú hamburguesa -->
-      <button class="menu-toggle" [class.open]="sidebarOpen()" (click)="toggleSidebar()">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <!-- Overlay -->
-      <div class="overlay" [class.open]="sidebarOpen()" (click)="sidebarOpen.set(false)"></div>
-
-      <!-- Menú lateral -->
-      <div class="sidebar" [class.open]="sidebarOpen()">
-        <div class="sidebar-header">
-          <h2 class="sidebar-title">Menú</h2>
+<div class="class_body_tecnico">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="header-left">
+        <button
+          class="menu-toggle"
+          [class.open]="sidebarOpen"
+          (click)="toggleSidebar()"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="logo-section">
+          <div class="logo-circle">
+            <img
+              src="/placeholder.svg?height=32&width=32"
+              alt="Logo"
+              class="logo-img"
+            />
+          </div>
+          <h1>ForestTrack Colombia</h1>
         </div>
-        <ul class="sidebar-menu">
-          <li class="menu-item" [class.active]="currentSection() === 'conglomerados'" (click)="selectSection('conglomerados')">
-            <i class="fas fa-list"></i><span>Conglomerados</span>
-          </li>
-          <li class="menu-item" [class.active]="currentSection() === 'muestras'" (click)="selectSection('muestras')">
-            <i class="fas fa-vial"></i><span>Muestras</span>
-          </li>
-          <li class="menu-item" [class.active]="currentSection() === 'rutas'" (click)="selectSection('rutas')">
-            <i class="fas fa-route"></i><span>Rutas de Muestreo</span>
-          </li>
-          <li class="menu-item" [class.active]="currentSection() === 'papelera'" (click)="selectSection('papelera')">
-            <i class="fas fa-trash"></i><span>Papelera</span>
-          </li>
-          <li class="menu-item">
-            <i class="fas fa-sign-out-alt"></i><span><a routerLink="/login" style="text-decoration: none; color: inherit">Cerrar Sesión</a></span>
-          </li>
-        </ul>
       </div>
-
-      <!-- Título principal -->
-    <h1>{{ title }}</h1>
-
-<div *ngIf="currentSection() === 'conglomerados'">
-  <p>Sección de Conglomerados</p>
-</div>
-
-<div *ngIf="currentSection() === 'muestras'">
-  <p>Sección de Muestras</p>
-</div>
-
-
-      <div *ngIf="currentSection() === 'rutas'">
-        <!-- Aquí irá el contenido de rutas -->
-        <p>Sección de Rutas</p>
-      </div>
-
-      <div *ngIf="currentSection() === 'papelera'">
-        <!-- Aquí irá el contenido de la papelera -->
-        <p>Sección de Papelera</p>
+      <div class="header-right">
+        <span class="user-role">Técnico de Suelos</span>
+        <button class="logout-btn" (click)="handleLogout()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16,17 21,12 16,7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
       </div>
     </div>
-  `,  
-  styleUrls: ['./tecnico.component.css']
-})
-export class TecnicoComponent {
-  currentSection = signal<'conglomerados' | 'muestras' | 'rutas' | 'papelera'>('conglomerados');
-  sidebarOpen = signal(false);
+  </header>
 
-  toggleSidebar() {
-    this.sidebarOpen.update(v => !v);
-  }
+  <!-- Sidebar -->
+  <div class="sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-content">
+      <nav class="sidebar-nav">
+        <button
+          class="nav-item"
+          [class.active]="currentSection === 'conglomerados'"
+          (click)="switchSection('conglomerados')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="8" y1="6" x2="21" y2="6" />
+            <line x1="8" y1="12" x2="21" y2="12" />
+            <line x1="8" y1="18" x2="21" y2="18" />
+            <line x1="3" y1="6" x2="3.01" y2="6" />
+            <line x1="3" y1="12" x2="3.01" y2="12" />
+            <line x1="3" y1="18" x2="3.01" y2="18" />
+          </svg>
+          <span>Conglomerados</span>
+        </button>
+        <button
+          class="nav-item"
+          [class.active]="currentSection === 'muestras'"
+          (click)="switchSection('muestras')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+            />
+            <polyline points="14,2 14,8 20,8" />
+            <path d="M10 13H8" />
+            <path d="M16 13H14" />
+            <path d="M10 17H8" />
+            <path d="M16 17H14" />
+          </svg>
+          <span>Muestras</span>
+        </button>
+        <button
+          class="nav-item"
+          [class.active]="currentSection === 'rutas'"
+          (click)="switchSection('rutas')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+            />
+            <polyline points="7.5,4.21 12,6.81 16.5,4.21" />
+            <polyline points="7.5,19.79 7.5,14.6 3,12" />
+            <polyline points="21,12 16.5,14.6 16.5,19.79" />
+          </svg>
+          <span>Rutas de Muestreo</span>
+        </button>
+        <button
+          class="nav-item"
+          [class.active]="currentSection === 'papelera'"
+          (click)="switchSection('papelera')"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3,6 5,6 21,6" />
+            <path
+              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+            />
+          </svg>
+          <span>Papelera</span>
+        </button>
+      </nav>
+    </div>
+  </div>
 
-  selectSection(section: 'conglomerados' | 'muestras' | 'rutas' | 'papelera') {
-    this.currentSection.set(section);
-    this.sidebarOpen.set(false);
-  }
+  <!-- Overlay -->
+  <div
+    class="overlay"
+    [class.open]="sidebarOpen"
+    (click)="closeSidebar()"
+  ></div>
 
-  get title() {
-    switch (this.currentSection()) {
-      case 'muestras': return 'MUESTRAS';
-      case 'rutas': return 'RUTAS DE MUESTREO';
-      case 'papelera': return 'PAPELERA';
-      default: return 'CONGLOMERADOS';
-    }
-  }
-}
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <!-- Sección Conglomerados -->
+      <div class="section" [class.active]="currentSection === 'conglomerados'">
+        <div class="section-header">
+          <h2>CONGLOMERADOS</h2>
+          <p class="section-description">
+            Conglomerados aprobados para muestreo
+          </p>
+        </div>
+
+        <div class="tabs">
+          <div class="tab-list">
+            <button class="tab active">APROBADOS</button>
+          </div>
+          <div class="tab-content">
+            <div class="empty-state" *ngIf="conglomerados.length === 0">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="empty-icon"
+              ></svg>
+              <p>No hay conglomerados aprobados disponibles</p>
+              <p class="empty-subtitle">
+                Los conglomerados son creados y aprobados por el jefe de brigada
+              </p>
+            </div>
+            <div class="cards-grid" *ngIf="conglomerados.length > 0">
+              <div class="card" *ngFor="let conglomerado of conglomerados">
+                <div class="card-header">
+                  <h3>{{ conglomerado.nombre || conglomerado.id }}</h3>
+                </div>
+                <div class="card-content">
+                  <p>
+                    <strong>Departamento:</strong>
+                    {{ conglomerado.departamento || "No especificado" }}
+                  </p>
+                  <p>
+                    <strong>Municipio:</strong>
+                    {{ conglomerado.municipio || "No especificado" }}
+                  </p>
+                  <p><strong>ID:</strong> {{ conglomerado.id }}</p>
+                  <div class="badge">{{ conglomerado.estado }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Muestras -->
+      <div class="section" [class.active]="currentSection === 'muestras'">
+        <div class="section-header">
+          <h2>REGISTRO DE MUESTRAS</h2>
+        </div>
+
+        <div class="muestras-layout">
+          <!-- Formulario -->
+          <div class="card">
+            <div class="card-header">
+              <h3>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+                  />
+                  <polyline points="14,2 14,8 20,8" />
+                  <path d="M10 13H8" />
+                  <path d="M16 13H14" />
+                  <path d="M10 17H8" />
+                  <path d="M16 17H14" />
+                </svg>
+                Nueva Muestra
+              </h3>
+            </div>
+            <div class="card-content">
+              <form
+                [formGroup]="muestraForm"
+                (ngSubmit)="onSubmitMuestra()"
+                class="form"
+              >
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="codigo">Código de la Muestra</label>
+                    <input
+                      type="text"
+                      id="codigo"
+                      formControlName="codigo"
+                      readonly
+                      class="form-input readonly"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="conglomerado">Conglomerado Asociado</label>
+                    <select
+                      id="conglomerado"
+                      formControlName="conglomerado"
+                      class="form-select"
+                      required
+                    >
+                      <option value="">Seleccionar Conglomerado</option>
+                      <option
+                        *ngFor="let cong of conglomerados"
+                        [value]="cong.id"
+                      >
+                        {{ cong.nombre || cong.id }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="subparcela">Subparcela</label>
+                    <select
+                      id="subparcela"
+                      formControlName="subparcela"
+                      class="form-select"
+                    >
+                      <option value="">Seleccionar Subparcela</option>
+                      <option *ngFor="let sub of subparcelas" [value]="sub">
+                        {{ sub }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="fechaRecoleccion">Fecha de Recolección</label>
+                    <input
+                      type="date"
+                      id="fechaRecoleccion"
+                      formControlName="fechaRecoleccion"
+                      class="form-input"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row-3">
+                  <div class="form-group">
+                    <label for="azimut">Azimut (°)</label>
+                    <input
+                      type="number"
+                      id="azimut"
+                      formControlName="azimut"
+                      class="form-input"
+                      min="0"
+                      max="360"
+                      placeholder="45"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="distancia">Distancia (m)</label>
+                    <input
+                      type="number"
+                      id="distancia"
+                      formControlName="distancia"
+                      class="form-input"
+                      min="0"
+                      max="7"
+                      step="0.1"
+                      placeholder="2"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="profundidad">Profundidad (cm)</label>
+                    <input
+                      type="number"
+                      id="profundidad"
+                      formControlName="profundidad"
+                      class="form-input"
+                      min="0"
+                      max="50"
+                      placeholder="30"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="colorSuelo">Color del Suelo</label>
+                    <input
+                      type="text"
+                      id="colorSuelo"
+                      formControlName="colorSuelo"
+                      class="form-input"
+                      placeholder="Ej: Marrón claro"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="pesoFresco">Peso Fresco (g)</label>
+                    <input
+                      type="number"
+                      id="pesoFresco"
+                      formControlName="pesoFresco"
+                      class="form-input"
+                      min="0"
+                      placeholder="1000"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Tipo de Análisis</label>
+                  <div class="checkbox-group">
+                    <label
+                      class="checkbox-label"
+                      *ngFor="let analisis of tiposAnalisis"
+                    >
+                      <input type="checkbox" [value]="analisis.value" />
+                      <span class="checkmark"></span>
+                      {{ analisis.label }}
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="observaciones">Observaciones</label>
+                  <textarea
+                    id="observaciones"
+                    formControlName="observaciones"
+                    class="form-textarea"
+                    rows="3"
+                    placeholder="Ej: Presencia de raíces, textura arenosa, etc."
+                  >
+                  </textarea>
+                </div>
+
+                <div class="form-actions">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    [disabled]="!muestraForm.valid"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+                      />
+                      <polyline points="17,21 17,13 7,13 7,21" />
+                      <polyline points="7,3 7,8 15,8" />
+                    </svg>
+                    Guardar Registro
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="muestraForm.reset(); generateSampleCode()"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="15" y1="9" x2="9" y2="15" />
+                      <line x1="9" y1="9" x2="15" y2="15" />
+                    </svg>
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Lista de Muestras -->
+          <div class="card">
+            <div class="card-header">
+              <h3>Muestras Registradas</h3>
+            </div>
+            <div class="card-content">
+              <div class="muestras-list">
+                <div class="empty-state" *ngIf="muestras.length === 0">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="48"
+                    height="48"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="empty-icon"
+                  >
+                    <path
+                      d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"
+                    />
+                    <polyline points="14,2 14,8 20,8" />
+                    <path d="M10 13H8" />
+                    <path d="M16 13H14" />
+                    <path d="M10 17H8" />
+                    <path d="M16 17H14" />
+                  </svg>
+                  <p>No hay muestras registradas</p>
+                </div>
+                <div class="muestra-item" *ngFor="let muestra of muestras">
+                  <div class="muestra-header">
+                    <div class="muestra-info">
+                      <h4>{{ muestra.codigo }}</h4>
+                      <p>
+                        <strong>Conglomerado:</strong>
+                        {{ getConglomeradoNombre(muestra.conglomerado) }}
+                      </p>
+                      <p>
+                        <strong>Fecha:</strong>
+                        {{ muestra.fechaRecoleccion | date : "dd/MM/yyyy" }}
+                      </p>
+                      <div class="muestra-badges">
+                        <span
+                          class="badge"
+                          *ngFor="let analisis of muestra.analisis"
+                          >{{ analisis }}</span
+                        >
+                      </div>
+                    </div>
+                    <button
+                      class="btn btn-destructive btn-sm"
+                      (click)="eliminarMuestra(muestra.id)"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <polyline points="3,6 5,6 21,6" />
+                        <path
+                          d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Rutas -->
+      <div class="section" [class.active]="currentSection === 'rutas'">
+        <div class="section-header">
+          <div>
+            <h2>RUTAS DE MUESTREO</h2>
+          </div>
+          <button class="btn btn-primary" (click)="abrirModalNuevaRuta()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Nueva Ruta
+          </button>
+        </div>
+
+        <div class="empty-state" *ngIf="rutas.length === 0">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="empty-icon"
+          >
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+            />
+            <polyline points="7.5,4.21 12,6.81 16.5,4.21" />
+            <polyline points="7.5,19.79 7.5,14.6 3,12" />
+            <polyline points="21,12 16.5,14.6 16.5,19.79" />
+          </svg>
+          <p>No hay rutas registradas</p>
+        </div>
+
+        <div class="cards-grid" *ngIf="rutas.length > 0">
+          <div class="ruta-card" *ngFor="let ruta of rutas">
+            <div class="ruta-header">
+              <div class="ruta-info">
+                <h3>Muestra: {{ ruta.codigo }}</h3>
+                <p><strong>Conglomerado:</strong> {{ ruta.conglomerado }}</p>
+                <p><strong>Fecha:</strong> {{ ruta.fecha }}</p>
+              </div>
+              <div
+                class="ruta-status"
+                [ngClass]="getEstadoRuta(ruta.estado).class"
+              >
+                {{ getEstadoRuta(ruta.estado).label }}
+              </div>
+            </div>
+
+            <div class="proceso-envio">
+              <h4>Proceso de Envío</h4>
+              <div class="etapas-container">
+                <div class="etapas-line"></div>
+                <div
+                  class="etapa"
+                  *ngFor="
+                    let etapa of [
+                      'Recolectada',
+                      'Empacada',
+                      'En Ruta',
+                      'Entregada'
+                    ];
+                    let i = index
+                  "
+                >
+                  <div
+                    class="etapa-circulo"
+                    [ngClass]="i <= ruta.estado ? 'activa' : 'inactiva'"
+                  >
+                    {{ i + 1 }}
+                  </div>
+                  <div class="etapa-texto">{{ etapa }}</div>
+                  <div class="etapa-fecha" *ngIf="getFechaEtapa(ruta, i)">
+                    {{ getFechaEtapa(ruta, i) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ruta-actions">
+              <button
+                class="btn btn-secondary btn-sm"
+                style="flex: 1"
+                (click)="abrirModalActualizarEstado(ruta.id)"
+              >
+                Actualizar Estado
+              </button>
+              <button
+                class="btn btn-destructive btn-sm"
+                (click)="eliminarRuta(ruta.id)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="3,6 5,6 21,6" />
+                  <path
+                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Papelera -->
+      <div class="section" [class.active]="currentSection === 'papelera'">
+        <div class="section-header">
+          <h2>PAPELERA</h2>
+        </div>
+
+        <div class="empty-state" *ngIf="papelera.length === 0">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="empty-icon"
+          >
+            <polyline points="3,6 5,6 21,6" />
+            <path
+              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+            />
+          </svg>
+          <p>La papelera está vacía</p>
+        </div>
+
+        <div class="cards-grid" *ngIf="papelera.length > 0">
+          <div
+            class="card"
+            *ngFor="let item of papelera"
+            style="border: 1px solid #fecaca; background-color: #fef2f2"
+          >
+            <div class="card-header">
+              <h3>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  style="color: #dc2626"
+                >
+                  <polyline points="3,6 5,6 21,6" />
+                  <path
+                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                  />
+                </svg>
+                {{ item.nombre || item.codigo || "Item eliminado" }}
+              </h3>
+            </div>
+            <div class="card-content">
+              <div class="badge badge-destructive">{{ item.tipo }}</div>
+              <div style="margin-top: 1rem">
+                <button
+                  class="btn btn-secondary btn-sm"
+                  (click)="restaurarItem(item.id)"
+                  style="width: 100%"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="1,4 1,10 7,10" />
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                  </svg>
+                  Restaurar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Nueva Ruta -->
+  <div class="modal" *ngIf="modalNuevaRutaOpen" style="display: flex">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Nueva Ruta de Muestreo</h3>
+        <button class="modal-close" (click)="cerrarModalNuevaRuta()">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="nuevaRutaForm" (ngSubmit)="onSubmitNuevaRuta()">
+          <div class="form-group">
+            <label for="muestra-select">Seleccionar Muestra</label>
+            <select
+              id="muestra-select"
+              formControlName="muestraId"
+              class="form-select"
+              required
+            >
+              <option value="">Seleccionar muestra para envío</option>
+              <option
+                *ngFor="let muestra of getMuestrasDisponibles()"
+                [value]="muestra.id"
+              >
+                {{ muestra.codigo }} -
+                {{ getConglomeradoNombre(muestra.conglomerado) }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fecha-envio">Fecha de Envío</label>
+            <input
+              type="date"
+              id="fecha-envio"
+              formControlName="fechaEnvio"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!nuevaRutaForm.valid"
+            >
+              Crear Ruta
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cerrarModalNuevaRuta()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Actualizar Estado -->
+  <div class="modal" *ngIf="modalActualizarEstadoOpen" style="display: flex">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Actualizar Estado de Ruta</h3>
+        <button class="modal-close" (click)="cerrarModalActualizarEstado()">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          [formGroup]="actualizarEstadoForm"
+          (ngSubmit)="onSubmitActualizarEstado()"
+        >
+          <div class="form-group">
+            <label for="nuevo-estado">Nuevo Estado</label>
+            <select
+              id="nuevo-estado"
+              formControlName="nuevoEstado"
+              class="form-select"
+              required
+            >
+              <option *ngFor="let estado of estadosRuta" [value]="estado.value">
+                {{ estado.label }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fecha-actualizacion">Fecha de Actualización</label>
+            <input
+              type="date"
+              id="fecha-actualizacion"
+              formControlName="fechaActualizacion"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!actualizarEstadoForm.valid"
+            >
+              Actualizar Estado
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cerrarModalActualizarEstado()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
