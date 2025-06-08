@@ -4,7 +4,7 @@
 }
 
 .header {
-  background: #1e40af;
+  background: #15803d;
   color: white;
   padding: 1rem 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -105,12 +105,12 @@
 }
 
 .btn-primary {
-  background: #2563eb;
+  background: #15803d;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #1d4ed8;
+  background: #15803d;
 }
 
 .btn-secondary {
