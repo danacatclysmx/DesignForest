@@ -80,8 +80,8 @@ export class LoginComponent implements AfterViewInit {
       this.authenticateUser(usuario, contrasena)
         .then((redirectPath) => {
           if (redirectPath) {
-            // En un proyecto real, aquí usarías el Router de Angular
-            window.location.href = redirectPath;
+            // Usar el Router de Angular en lugar de window.location.href
+            this.router.navigate([redirectPath]);
           }
         })
         .catch((error) => {
@@ -113,11 +113,8 @@ export class LoginComponent implements AfterViewInit {
         const validCredentials: {
           [key: string]: { password: string; redirect: string };
         } = {
-          Arlec_Mohamed: { password: 'Arlec_Mohamed', redirect: 'jefe.html' },
-          Larita_Garcia: {
-            password: 'Larita_Garcia',
-            redirect: 'tecnico.html',
-          },
+          Arlec_Mohamed: { password: 'Arlec_Mohamed', redirect: '/jefe' },
+          Larita_Garcia: { password: 'Larita_Garcia', redirect: '/tecnico' },
         };
 
         if (

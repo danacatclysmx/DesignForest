@@ -1,193 +1,307 @@
-    <div class="container">
-        <!-- Menú hamburguesa para dispositivos móviles -->
-        <button class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
+<div class="jefe-dashboard">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-container">
+      <div class="header-left">
+        <div class="logo-section">
+          <div class="logo-circle">
+            <img src="assets/logo.png" alt="Logo" class="logo-img" />
+          </div>
+          <h1>ForestTrack Colombia - Jefe de Brigada</h1>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="user-role">Jefe de Brigada</span>
+        <button class="logout-btn" (click)="logout()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16,17 21,12 16,7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
         </button>
-        
-        <!-- Overlay para cerrar menú lateral -->
-        <div class="overlay" id="overlay"></div>
-        
-        <!-- Menú lateral de navegación -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2 class="sidebar-title">Menú</h2>
-            </div>
-            <ul class="sidebar-menu">
-                <!-- Opciones de menú con iconos -->
-                <li class="menu-item active" data-section="conglomerados">
-                    <i class="fas fa-list"></i>
-                    <span>Lista de Conglomerados</span>
-                </li>
-                <li class="menu-item" data-section="papelera">
-                    <i class="fas fa-trash"></i>
-                    <span>Papelera</span>
-                </li>
-                <li class="menu-item" data-section="calculadora">
-                    <i class="fas fa-calculator"></i>
-                    <span>Calculadora de Áreas</span>
-                </li>
-            </ul>
-            <!-- Botón para crear nuevo conglomerado -->
-            <button (click)="abrirCrear()">CREAR</button>
-            <div class="modal-overlay" #modalCrear>
-        </div>
-
-        <!-- Modal para crear nuevos conglomerados -->
-        <div class="modal-overlay" id="modalCrear">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-title">CREAR NUEVO CONGLOMERADO</div>
-                    <button class="close-button" id="closeCrearModal">&times;</button>
-                </div>
-                <!-- Formulario de creación con validación -->
-                <form id="formCrearConglomerado">
-                    <!-- Campos de formulario -->
-                    <div class="form-group">
-                        <label for="departamento">Departamento:</label>
-                        <input type="text" id="departamento" name="departamento" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="municipio">Municipio:</label>
-                        <input type="text" id="municipio" name="municipio" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="corregimiento">Corregimiento:</label>
-                        <input type="text" id="corregimiento" name="corregimiento">
-                    </div>
-                    <div class="form-group">
-                        <label for="coordenadas">Coordenadas Centro:</label>
-                        <!-- Validación de formato de coordenadas -->
-                        placeholder="Ej: 04°32'15.67"N 74°12'45.89"W"
-                    </div>
-                    <!-- Fechas de inicio y fin -->
-                    <div class="form-group">
-                        <label for="fechaInicio">Fecha de Inicio:</label>
-                        <input type="date" id="fechaInicio" name="fechaInicio" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="fechaFin">Fecha de Finalización:</label>
-                        <input type="date" id="fechaFin" name="fechaFin" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="precision">Precisión GPS:</label>
-                        <input type="text" id="precision" name="precision" placeholder="Ej: ±0.35 m" required>
-                    </div>
-                    <!-- Punto de referencia -->
-                    <h3>Punto de Referencia</h3>
-                    <div class="form-group">
-                        <label for="puntoTipo">Tipo:</label>
-                        <input type="text" id="puntoTipo" name="puntoTipo" placeholder="Ej: Árbol destacado">
-                    </div>
-                    <div class="form-group">
-                        <label for="puntoAzimut">Azimut:</label>
-                        <input type="text" id="puntoAzimut" name="puntoAzimut" placeholder="Ej: 45°">
-                    </div>
-                    <div class="form-group">
-                        <label for="puntoDistancia">Distancia horizontal:</label>
-                        <input type="text" id="puntoDistancia" name="puntoDistancia" placeholder="Ej: 15 m">
-                    </div>
-                    <!-- Botones de acción -->
-                    <div class="action-buttons">
-                        <button type="button" class="action-button reject-button" id="cancelarCrear">CANCELAR</button>
-                        <button type="submit" class="action-button approve-button">GUARDAR</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div id="conglomeradosContainer">
-            <app-conglomerado-card 
-                *ngFor="let cong of conglomerados"
-                [conglomerado]="cong">
-            </app-conglomerado-card>
-        </div>
-
-        <!-- Título principal -->
-        <h1 id="mainTitle">CONGLOMERADOS</h1>
-        
-        <!-- Mensaje de bienvenida personalizado -->
-        <div id="welcomeMessage" class="welcome-message"></div>
-        
-        <!-- Filtros por estado -->
-        <div class="status-tabs" id="statusTabs">
-            <div class="status-tab active" data-status="pendientes" onclick="filterConglomerados('pendientes', event)">PENDIENTES</div>
-            <div class="status-tab" data-status="aprobados" onclick="filterConglomerados('aprobados', event)">APROBADOS</div>
-            <div class="status-tab" data-status="rechazados" onclick="filterConglomerados('rechazados', event)">RECHAZADOS</div>
-        </div>
-        
-        <!-- Contenedor para listado dinámico de conglomerados -->
-        <div id="conglomeradosContainer">
-            <!-- Los conglomerados se cargarán dinámicamente aquí -->
-        </div>
+      </div>
     </div>
+  </header>
 
-    <!-- Modal de detalles de conglomerado -->
-    <div class="modal-overlay" id="modalDetalles">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="modalConglomeradoId"></div>
-                <button class="close-button" id="closeModal">&times;</button>
-            </div>
-            <!-- Sección de información general -->
-            <div class="modal-section">
-                <div class="info-grid">
-                    <div class="info-item"><strong>Fecha de Inicio:</strong> <span id="fechaInicioDetalle"></span></div>
-                    <div class="info-item"><strong>Fecha de Finalización:</strong> <span id="fechaFinDetalle"></span></div>
-                    <div class="info-item"><strong>Departamento:</strong> <span id="departamentoDetalle"></span></div>
-                    <div class="info-item"><strong>Municipio:</strong> <span id="municipioDetalle"></span></div>
-                    <div class="info-item"><strong>Corregimiento:</strong> <span id="corregimientoDetalle"></span></div>
-                    <div class="info-item"><strong>Coordenadas Centro:</strong> <span id="coordenadasDetalle"></span></div>
-                    <div class="info-item"><strong>Aprobado por:</strong> <span id="aprobadoPorDetalle"></span></div>
-                    <div class="info-item"><strong>Precisión GPS:</strong> <span id="precisionDetalle"></span></div>
-                    <div class="info-item"><strong>Fecha Aprobación:</strong> <span id="fechaAprobacionDetalle"></span></div>
-                    <div class="info-item"><strong>Estado:</strong> <span id="estadoDetalle"></span></div>
-                </div>
-            </div>
-            <!-- Mapa de subparcelas -->
-            <div *ngFor="let conglomerado of conglomerados">
-            <app-mapa-modal [coordenadas]="conglomerado.coordenadas_centro"></app-mapa-modal>
-            </div>
-            <div class="divider"></div>
-            <div class="modal-section">
-                <h3>Mapa de Subparcelas</h3>
-                <div id="map-container">
-                    <div id="map"></div> <!-- Contenedor para mapa Leaflet -->
-                </div>
-            </div>
-            <!-- Información de puntos de referencia -->
-            <div class="divider"></div>
-            <div class="modal-section">
-                <h3>Puntos de Referencia</h3>
-                <div class="punto-referencia">
-                    <div><strong>Tipo:</strong> <span id="puntoTipoDetalle"></span></div>
-                    <div><strong>Azimut:</strong> <span id="puntoAzimutDetalle"></span></div>
-                    <div><strong>Distancia horizontal:</strong> <span id="puntoDistanciaDetalle"></span></div>
-                </div>
-            </div>
-            <!-- Tabla de subparcelas -->
-            <div class="divider"></div>
-            <div class="modal-section">
-                <h3>Subparcelas</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Subparcela</th>
-                            <th>Radio</th>
-                            <th>Azimut</th>
-                            <th>Distancia al Centro</th>
-                            <th>Materializado</th>
-                            <th>Color</th>
-                            <th>Posición</th>
-                        </tr>
-                    </thead>
-                    <tbody id="subparcelasTable">
-                        <!-- Datos de subparcelas se llenarán dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-            <!-- Botones de acción dinámicos -->
-            <div class="action-buttons" id="actionButtons"></div>
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      <!-- Título y botón crear -->
+      <div class="section-header">
+        <h2>CONGLOMERADOS</h2>
+        <button class="btn btn-primary" (click)="abrirCrear()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          Crear Conglomerado
+        </button>
+      </div>
+
+      <!-- Filtros por estado -->
+      <div class="status-tabs">
+        <button
+          class="status-tab"
+          [class.active]="currentFilter === 'pendientes'"
+          (click)="filterConglomerados('pendientes')"
+        >
+          PENDIENTES
+        </button>
+        <button
+          class="status-tab"
+          [class.active]="currentFilter === 'aprobados'"
+          (click)="filterConglomerados('aprobados')"
+        >
+          APROBADOS
+        </button>
+        <button
+          class="status-tab"
+          [class.active]="currentFilter === 'rechazados'"
+          (click)="filterConglomerados('rechazados')"
+        >
+          RECHAZADOS
+        </button>
+      </div>
+
+      <!-- Lista de conglomerados -->
+      <div class="conglomerados-grid">
+        <div class="empty-state" *ngIf="conglomeradosFiltrados.length === 0">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="empty-icon"
+          >
+            <line x1="8" y1="6" x2="21" y2="6" />
+            <line x1="8" y1="12" x2="21" y2="12" />
+            <line x1="8" y1="18" x2="21" y2="18" />
+            <line x1="3" y1="6" x2="3.01" y2="6" />
+            <line x1="3" y1="12" x2="3.01" y2="12" />
+            <line x1="3" y1="18" x2="3.01" y2="18" />
+          </svg>
+          <p>No hay conglomerados {{ currentFilter }}</p>
         </div>
+
+        <div
+          class="conglomerado-card"
+          *ngFor="let conglomerado of conglomeradosFiltrados"
+        >
+          <div class="card-header">
+            <h3>{{ conglomerado.id }}</h3>
+            <div class="badge" [ngClass]="'badge-' + conglomerado.estado">
+              {{ conglomerado.estado.toUpperCase() }}
+            </div>
+          </div>
+          <div class="card-content">
+            <p>
+              <strong>Departamento:</strong> {{ conglomerado.departamento }}
+            </p>
+            <p><strong>Municipio:</strong> {{ conglomerado.municipio }}</p>
+            <p>
+              <strong>Coordenadas:</strong>
+              {{ conglomerado.coordenadas_centro }}
+            </p>
+            <p>
+              <strong>Fecha Inicio:</strong> {{ conglomerado.fecha_inicio }}
+            </p>
+            <p>
+              <strong>Fecha Fin:</strong> {{ conglomerado.fecha_finalizacion }}
+            </p>
+          </div>
+          <div
+            class="card-actions"
+            *ngIf="conglomerado.estado === 'pendientes'"
+          >
+            <button
+              class="btn btn-success btn-sm"
+              (click)="aprobarConglomerado(conglomerado.id)"
+            >
+              Aprobar
+            </button>
+            <button
+              class="btn btn-destructive btn-sm"
+              (click)="rechazarConglomerado(conglomerado.id)"
+            >
+              Rechazar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+  </main>
+
+  <!-- Modal Crear Conglomerado -->
+  <div class="modal" *ngIf="modalCrearOpen" style="display: flex">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Crear Nuevo Conglomerado</h3>
+        <button class="modal-close" (click)="cerrarModalCrear()">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          [formGroup]="conglomeradoForm"
+          (ngSubmit)="onSubmitConglomerado()"
+        >
+          <div class="form-row">
+            <div class="form-group">
+              <label for="departamento">Departamento</label>
+              <input
+                type="text"
+                id="departamento"
+                formControlName="departamento"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="municipio">Municipio</label>
+              <input
+                type="text"
+                id="municipio"
+                formControlName="municipio"
+                class="form-input"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="corregimiento">Corregimiento</label>
+            <input
+              type="text"
+              id="corregimiento"
+              formControlName="corregimiento"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="coordenadas">Coordenadas Centro</label>
+            <input
+              type="text"
+              id="coordenadas"
+              name="coordenadas"
+              placeholder="Ej: 04°32'15.67&quot;N 74°12'45.89&quot;W"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fechaInicio">Fecha de Inicio</label>
+              <input
+                type="date"
+                id="fechaInicio"
+                formControlName="fechaInicio"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="fechaFin">Fecha de Finalización</label>
+              <input
+                type="date"
+                id="fechaFin"
+                formControlName="fechaFin"
+                class="form-input"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="precision">Precisión GPS</label>
+            <input
+              type="text"
+              id="precision"
+              formControlName="precision"
+              class="form-input"
+              placeholder="Ej: ±0.35 m"
+              required
+            />
+          </div>
+
+          <h4>Punto de Referencia</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="puntoTipo">Tipo</label>
+              <input
+                type="text"
+                id="puntoTipo"
+                formControlName="puntoTipo"
+                class="form-input"
+                placeholder="Ej: Árbol destacado"
+              />
+            </div>
+            <div class="form-group">
+              <label for="puntoAzimut">Azimut</label>
+              <input
+                type="text"
+                id="puntoAzimut"
+                formControlName="puntoAzimut"
+                class="form-input"
+                placeholder="Ej: 45°"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="puntoDistancia">Distancia horizontal</label>
+            <input
+              type="text"
+              id="puntoDistancia"
+              formControlName="puntoDistancia"
+              class="form-input"
+              placeholder="Ej: 15 m"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!conglomeradoForm.valid"
+            >
+              Guardar
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="cerrarModalCrear()"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
