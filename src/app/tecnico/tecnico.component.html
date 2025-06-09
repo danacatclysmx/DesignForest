@@ -404,6 +404,33 @@
                   >
                   </textarea>
                 </div>
+                <div class="form-group">
+                  <label for="fotoMuestra">Foto de la muestra</label>
+                  <label
+                    for="fotoMuestra"
+                    class="btn btn-secondary"
+                    style="width: fit-content"
+                  >
+                    Seleccionar archivo
+                  </label>
+                  <input
+                    type="file"
+                    id="fotoMuestra"
+                    accept="image/*"
+                    (change)="onFotoMuestraSeleccionada($event)"
+                    capture="environment"
+                    style="display: none"
+                  />
+                </div>
+
+                <div *ngIf="previewFoto" class="form-group">
+                  <label>Vista previa:</label>
+                  <img
+                    [src]="previewFoto"
+                    alt="Vista previa"
+                    style="max-width: 100%; border-radius: 8px"
+                  />
+                </div>
 
                 <div class="form-actions">
                   <button
@@ -433,7 +460,7 @@
                   <button
                     type="button"
                     class="btn btn-secondary"
-                    (click)="muestraForm.reset(); generateSampleCode()"
+                    (click)="resetFormularioMuestra()"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -849,6 +876,7 @@
               required
             />
           </div>
+
           <div class="form-actions">
             <button
               type="submit"

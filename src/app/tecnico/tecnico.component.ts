@@ -122,7 +122,21 @@ export class TecnicoComponent implements OnInit {
       fechaActualizacion: ['', Validators.required],
     });
   }
+  previewFoto: string | ArrayBuffer | null = null;
+  fotoMuestra: File | null = null;
+  onFotoMuestraSeleccionada(event: Event): void {
+    const input = event.target as HTMLInputElement;
 
+    if (input.files && input.files.length > 0) {
+      this.fotoMuestra = input.files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewFoto = reader.result;
+      };
+      reader.readAsDataURL(this.fotoMuestra);
+    }
+  }
   ngOnInit() {
     this.loadData();
     this.generateSampleCode();
@@ -210,6 +224,12 @@ export class TecnicoComponent implements OnInit {
 
       alert('Muestra registrada correctamente');
     }
+  }
+  resetFormularioMuestra(): void {
+    this.muestraForm.reset();
+    this.generateSampleCode();
+    this.previewFoto = null;
+    this.fotoMuestra = null;
   }
 
   getSelectedAnalisis(): string[] {
