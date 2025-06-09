@@ -32,10 +32,15 @@
   </div>
 
   <div class="conglomerado-info">
-    <strong>Fecha Inicio:</strong> {{ conglomerado.fecha_inicio }} - 
-    <strong>Fecha Fin:</strong> {{ conglomerado.fecha_finalizacion }}
+    <strong>Fecha Inicio:</strong> {{ formatDate(conglomerado.fecha_inicio) }} - 
+    <strong>Fecha Fin:</strong> {{ formatDate(conglomerado.fecha_finalizacion) }}
   </div>
-
+  <div class="conglomerado-info">
+    <strong>Estado:</strong>
+    <span class="estado-badge {{conglomerado.estado}}">
+      {{ (conglomerado.estado || '') | uppercase }}
+    </span>
+  </div>
   <div class="conglomerado-info">
     <strong>Estado:</strong> 
     <div class="estado-badge">{{ toUpperCase(conglomerado.estado) }}</div>

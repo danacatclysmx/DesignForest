@@ -1,306 +1,315 @@
-<div class="jefe-dashboard">
-  <!-- Header -->
-  <header class="header">
-    <div class="header-container">
-      <div class="header-left">
-        <div class="logo-section">
-          <div class="logo-circle">
-            <img src="assets/logo.png" alt="Logo" class="logo-img" />
-          </div>
-          <h1>ForestTrack Colombia - Jefe de Brigada</h1>
-        </div>
+<div class="body">
+  <div class="container">
+    <!-- Menú hamburguesa -->
+    <button class="menu-toggle" id="menuToggle" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <!-- Overlay para cerrar menú lateral -->
+    <div class="overlay" id="overlay" [class.open]="menuOpen" (click)="toggleMenu()"></div>
+    
+    <!-- Menú lateral -->
+    <div class="sidebar" id="sidebar" [class.open]="menuOpen">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Menú</h2>
       </div>
-      <div class="header-right">
-        <span class="user-role">Jefe de Brigada</span>
-        <button class="logout-btn" (click)="logout()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-            <polyline points="16,17 21,12 16,7" />
-            <line x1="21" y1="12" x2="9" y2="12" />
-          </svg>
-        </button>
+      <ul class="sidebar-menu">
+        <li class="menu-item" [class.active]="currentSection === 'conglomerados'" 
+            (click)="setCurrentSection('conglomerados')" data-section="conglomerados">
+          <i class="fas fa-list"></i>
+          <span>Lista de Conglomerados</span>
+        </li>
+        <li class="menu-item" [class.active]="currentSection === 'papelera'" 
+            (click)="setCurrentSection('papelera')" data-section="papelera">
+          <i class="fas fa-trash"></i>
+          <span>Papelera</span>
+        </li>
+      </ul>
+      <div class="logout-button" id="logoutButton" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN
       </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <div class="container">
-      <!-- Título y botón crear -->
-      <div class="section-header">
-        <h2>CONGLOMERADOS</h2>
-        <button class="btn btn-primary" (click)="abrirCrear()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          Crear Conglomerado
-        </button>
-      </div>
-
-      <!-- Filtros por estado -->
-      <div class="status-tabs">
-        <button
-          class="status-tab"
-          [class.active]="currentFilter === 'pendientes'"
-          (click)="filterConglomerados('pendientes')"
-        >
-          PENDIENTES
-        </button>
-        <button
-          class="status-tab"
-          [class.active]="currentFilter === 'aprobados'"
-          (click)="filterConglomerados('aprobados')"
-        >
-          APROBADOS
-        </button>
-        <button
-          class="status-tab"
-          [class.active]="currentFilter === 'rechazados'"
-          (click)="filterConglomerados('rechazados')"
-        >
-          RECHAZADOS
-        </button>
-      </div>
-
-      <!-- Lista de conglomerados -->
-      <div class="conglomerados-grid">
-        <div class="empty-state" *ngIf="conglomeradosFiltrados.length === 0">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="48"
-            height="48"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="empty-icon"
-          >
-            <line x1="8" y1="6" x2="21" y2="6" />
-            <line x1="8" y1="12" x2="21" y2="12" />
-            <line x1="8" y1="18" x2="21" y2="18" />
-            <line x1="3" y1="6" x2="3.01" y2="6" />
-            <line x1="3" y1="12" x2="3.01" y2="12" />
-            <line x1="3" y1="18" x2="3.01" y2="18" />
-          </svg>
-          <p>No hay conglomerados {{ currentFilter }}</p>
-        </div>
-
-        <div
-          class="conglomerado-card"
-          *ngFor="let conglomerado of conglomeradosFiltrados"
-        >
-          <div class="card-header">
-            <h3>{{ conglomerado.id }}</h3>
-            <div class="badge" [ngClass]="'badge-' + conglomerado.estado">
-              {{ conglomerado.estado.toUpperCase() }}
-            </div>
-          </div>
-          <div class="card-content">
-            <p>
-              <strong>Departamento:</strong> {{ conglomerado.departamento }}
-            </p>
-            <p><strong>Municipio:</strong> {{ conglomerado.municipio }}</p>
-            <p>
-              <strong>Coordenadas:</strong>
-              {{ conglomerado.coordenadas_centro }}
-            </p>
-            <p>
-              <strong>Fecha Inicio:</strong> {{ conglomerado.fecha_inicio }}
-            </p>
-            <p>
-              <strong>Fecha Fin:</strong> {{ conglomerado.fecha_finalizacion }}
-            </p>
-          </div>
-          <div
-            class="card-actions"
-            *ngIf="conglomerado.estado === 'pendientes'"
-          >
-            <button
-              class="btn btn-success btn-sm"
-              (click)="aprobarConglomerado(conglomerado.id)"
-            >
-              Aprobar
-            </button>
-            <button
-              class="btn btn-destructive btn-sm"
-              (click)="rechazarConglomerado(conglomerado.id)"
-            >
-              Rechazar
-            </button>
-          </div>
-        </div>
+      <div class="create-button" id="createButton" (click)="abrirCrear()">
+        <i class="fas fa-plus"></i> CREAR
       </div>
     </div>
-  </main>
 
-  <!-- Modal Crear Conglomerado -->
-  <div class="modal" *ngIf="modalCrearOpen" style="display: flex">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Crear Nuevo Conglomerado</h3>
-        <button class="modal-close" (click)="cerrarModalCrear()">
-          &times;
-        </button>
-      </div>
-      <div class="modal-body">
-        <form
-          [formGroup]="conglomeradoForm"
-          (ngSubmit)="onSubmitConglomerado()"
-        >
-          <div class="form-row">
-            <div class="form-group">
-              <label for="departamento">Departamento</label>
-              <input
-                type="text"
-                id="departamento"
-                formControlName="departamento"
-                class="form-input"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="municipio">Municipio</label>
-              <input
-                type="text"
-                id="municipio"
-                formControlName="municipio"
-                class="form-input"
-                required
-              />
-            </div>
+    <!-- Modal Crear -->
+    <div class="modal-overlay" [class.open]="modalCrearOpen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">CREAR NUEVO CONGLOMERADO</div>
+          <button class="close-button" (click)="cerrarModalCrear()">&times;</button>
+        </div>
+        <div class="form-group">
+          <label>Seleccione la ubicación en el mapa:</label>
+          <div #mapContainerCrear id="map-container-crear"></div>
+          <div id="selected-coordinates">{{ selectedCoordinates }}</div>
+          <div id="location-details">
+            <div><strong>Departamento:</strong> <span id="auto-departamento">{{ locationData.departamento || '-' }}</span></div>
+            <div><strong>Municipio:</strong> <span id="auto-municipio">{{ locationData.municipio || '-' }}</span></div>
+            <div><strong>Corregimiento:</strong> <span id="auto-corregimiento">{{ locationData.corregimiento || '-' }}</span></div>
           </div>
-
+        </div>
+        
+        <form [formGroup]="conglomeradoForm" (ngSubmit)="onSubmitConglomerado()">
           <div class="form-group">
-            <label for="corregimiento">Corregimiento</label>
-            <input
-              type="text"
-              id="corregimiento"
-              formControlName="corregimiento"
-              class="form-input"
-            />
+            <label for="fechaInicio">Fecha de Inicio:</label>
+            <input type="date" id="fechaInicio" formControlName="fechaInicio" required>
           </div>
-
           <div class="form-group">
-            <label for="coordenadas">Coordenadas Centro</label>
-            <input
-              type="text"
-              id="coordenadas"
-              name="coordenadas"
-              placeholder="Ej: 04°32'15.67&quot;N 74°12'45.89&quot;W"
-              required
-            />
+            <label for="fechaFin">Fecha de Finalización:</label>
+            <input type="date" id="fechaFin" formControlName="fechaFin" required>
           </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="fechaInicio">Fecha de Inicio</label>
-              <input
-                type="date"
-                id="fechaInicio"
-                formControlName="fechaInicio"
-                class="form-input"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="fechaFin">Fecha de Finalización</label>
-              <input
-                type="date"
-                id="fechaFin"
-                formControlName="fechaFin"
-                class="form-input"
-                required
-              />
-            </div>
-          </div>
-
           <div class="form-group">
-            <label for="precision">Precisión GPS</label>
-            <input
-              type="text"
-              id="precision"
-              formControlName="precision"
-              class="form-input"
-              placeholder="Ej: ±0.35 m"
-              required
-            />
+            <label for="precision">Precisión GPS:</label>
+            <input type="text" id="precision" formControlName="precision" placeholder="Ej: ±0.35 m" required>
           </div>
-
-          <h4>Punto de Referencia</h4>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="puntoTipo">Tipo</label>
-              <input
-                type="text"
-                id="puntoTipo"
-                formControlName="puntoTipo"
-                class="form-input"
-                placeholder="Ej: Árbol destacado"
-              />
-            </div>
-            <div class="form-group">
-              <label for="puntoAzimut">Azimut</label>
-              <input
-                type="text"
-                id="puntoAzimut"
-                formControlName="puntoAzimut"
-                class="form-input"
-                placeholder="Ej: 45°"
-              />
-            </div>
-          </div>
-
+          <h3>Punto de Referencia</h3>
           <div class="form-group">
-            <label for="puntoDistancia">Distancia horizontal</label>
-            <input
-              type="text"
-              id="puntoDistancia"
-              formControlName="puntoDistancia"
-              class="form-input"
-              placeholder="Ej: 15 m"
-            />
+            <label for="puntoTipo">Tipo:</label>
+            <input type="text" id="puntoTipo" formControlName="puntoTipo" placeholder="Ej: Árbol destacado">
           </div>
-
-          <div class="form-actions">
-            <button
-              type="submit"
-              class="btn btn-primary"
-              [disabled]="!conglomeradoForm.valid"
-            >
-              Guardar
-            </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              (click)="cerrarModalCrear()"
-            >
-              Cancelar
-            </button>
+          <div class="form-group">
+            <label for="puntoAzimut">Azimut:</label>
+            <input type="text" id="puntoAzimut" formControlName="puntoAzimut" placeholder="Ej: 45°">
+          </div>
+          <div class="form-group">
+            <label for="puntoDistancia">Distancia horizontal:</label>
+            <input type="text" id="puntoDistancia" formControlName="puntoDistancia" placeholder="Ej: 15 m">
+          </div>
+          <div class="action-buttons">
+            <button type="button" class="action-button reject-button" (click)="cerrarModalCrear()">CANCELAR</button>
+            <button type="submit" class="action-button approve-button">GUARDAR</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal-overlay" [class.open]="modalEditarOpen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">EDITAR CONGLOMERADO {{ editingConglomerado?.id }}</div>
+          <button class="close-button" (click)="cerrarModalEditar()">&times;</button>
+        </div>
+        <form [formGroup]="editarForm" (ngSubmit)="onSubmitEditar()">
+          <input type="hidden" formControlName="id">
+          
+          <div class="form-group">
+            <label>Coordenadas Centro:</label>
+            <input type="text" [value]="editingConglomerado?.coordenadas_centro" readonly>
+          </div>
+          <div class="form-group">
+            <label>Departamento:</label>
+            <input type="text" [value]="editingConglomerado?.departamento" readonly>
+          </div>
+          <div class="form-group">
+            <label>Municipio:</label>
+            <input type="text" [value]="editingConglomerado?.municipio" readonly>
+          </div>
+          <div class="form-group">
+            <label>Corregimiento:</label>
+            <input type="text" [value]="editingConglomerado?.corregimiento || ''" readonly>
+          </div>
+          
+          <div class="form-group">
+            <label for="editFechaInicio">Fecha de Inicio:</label>
+            <input type="date" id="editFechaInicio" formControlName="fechaInicio" required>
+          </div>
+          <div class="form-group">
+            <label for="editFechaFin">Fecha de Finalización:</label>
+            <input type="date" id="editFechaFin" formControlName="fechaFin" required>
+          </div>
+          <div class="form-group">
+            <label for="editPrecision">Precisión GPS:</label>
+            <input type="text" id="editPrecision" formControlName="precision" placeholder="Ej: ±0.35 m" required>
+          </div>
+          <h3>Punto de Referencia</h3>
+          <div class="form-group">
+            <label for="editPuntoTipo">Tipo:</label>
+            <input type="text" id="editPuntoTipo" formControlName="puntoTipo" placeholder="Ej: Árbol destacado">
+          </div>
+          <div class="form-group">
+            <label for="editPuntoAzimut">Azimut:</label>
+            <input type="text" id="editPuntoAzimut" formControlName="puntoAzimut" placeholder="Ej: 45°">
+          </div>
+          <div class="form-group">
+            <label for="editPuntoDistancia">Distancia horizontal:</label>
+            <input type="text" id="editPuntoDistancia" formControlName="puntoDistancia" placeholder="Ej: 15 m">
+          </div>
+          <div class="action-buttons">
+            <button type="button" class="action-button reject-button" (click)="cerrarModalEditar()">CANCELAR</button>
+            <button type="submit" class="action-button approve-button">GUARDAR CAMBIOS</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Título principal -->
+    <h1 id="mainTitle">{{ currentSection === 'papelera' ? 'PAPELERA' : 'CONGLOMERADOS' }}</h1>
+    
+    <!-- Filtros por estado -->
+    <div class="status-tabs" id="statusTabs" *ngIf="currentSection === 'conglomerados'">
+      <div class="status-tab" [class.active]="currentFilter === 'pendientes'" 
+          (click)="filterConglomerados('pendientes')">PENDIENTES</div>
+      <div class="status-tab" [class.active]="currentFilter === 'aprobados'" 
+          (click)="filterConglomerados('aprobados')">APROBADOS</div>
+      <div class="status-tab" [class.active]="currentFilter === 'rechazados'" 
+          (click)="filterConglomerados('rechazados')">RECHAZADOS</div>
+    </div>
+    
+    <!-- Contenedor de conglomerados -->
+    <div id="conglomeradosContainer">
+      <div *ngIf="conglomeradosFiltrados.length === 0" class="no-data">
+        {{ currentSection === 'papelera' ? 'La papelera está vacía' : 'No hay conglomerados registrados' }}
+      </div>
+
+      <div class="conglomerado" 
+          *ngFor="let conglomerado of conglomeradosFiltrados" 
+          [attr.data-status]="conglomerado.estado"
+          (click)="showDetails(conglomerado.id)">
+        <div class="options-menu" (click)="$event.stopPropagation()">
+          <button class="options-button" (click)="toggleOptionsMenu($event, conglomerado.id)">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </button>
+          <div class="options-dropdown" [class.show]="showMenuId === conglomerado.id">
+            <ng-container *ngIf="currentSection === 'conglomerados'">
+              <div class="option-item" (click)="editConglomerado(conglomerado.id)">EDITAR</div>
+              <div class="option-item" (click)="deleteConglomerado(conglomerado.id)">ELIMINAR</div>
+            </ng-container>
+            <ng-container *ngIf="currentSection === 'papelera'">
+              <div class="option-item" (click)="restoreConglomerado(conglomerado.id)">RESTAURAR</div>
+              <div class="option-item delete-permanently" (click)="deletePermanently(conglomerado.id)">ELIMINAR PERMANENTEMENTE</div>
+            </ng-container>
+            <div class="option-item" (click)="showDetails(conglomerado.id)">VER DETALLES</div>
+          </div>
+        </div>
+        
+        <div class="conglomerado-id">{{ conglomerado.id }}</div>
+        <div class="conglomerado-info">
+          <strong>Ubicación:</strong> Departamento: {{ conglomerado.departamento }}, 
+          Municipio: {{ conglomerado.municipio }}
+          <span *ngIf="conglomerado.corregimiento">, Corregimiento: {{ conglomerado.corregimiento }}</span>
+        </div>
+        <div class="conglomerado-info">
+          <strong>Coordenadas Centro:</strong> {{ conglomerado.coordenadas_centro }}
+        </div>
+        <div class="conglomerado-info">
+          <strong>Fecha Inicio:</strong> {{ formatDate(conglomerado.fecha_inicio) }} - 
+          <strong>Fecha Fin:</strong> {{ formatDate(conglomerado.fecha_finalizacion) }}
+        </div>
+        <div class="conglomerado-info">
+          <strong>Estado:</strong> <span class="estado-badge {{conglomerado.estado}}">{{conglomerado.estado | uppercase}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Detalles -->
+  <div class="modal-overlay" [class.open]="modalDetallesOpen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">{{ selectedConglomerado?.id }}</div>
+        <button class="close-button" (click)="closeDetailsModal()">&times;</button>
+      </div>
+      
+      <div class="modal-section">
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>Fecha de Inicio:</strong>
+            <span>{{ formatDate(selectedConglomerado?.fecha_inicio) }}</span>
+          </div>
+          <div class="info-item">
+            <strong>Fecha de Finalización:</strong>
+            <span>{{ formatDate(selectedConglomerado?.fecha_finalizacion) }}</span>
+          </div>
+          <div class="info-item"><strong>Departamento:</strong> <span>{{ selectedConglomerado?.departamento }}</span></div>
+          <div class="info-item"><strong>Municipio:</strong> <span>{{ selectedConglomerado?.municipio }}</span></div>
+          <div class="info-item"><strong>Corregimiento:</strong> <span>{{ selectedConglomerado?.corregimiento || 'N/A' }}</span></div>
+          <div class="info-item"><strong>Coordenadas Centro:</strong> <span>{{ selectedConglomerado?.coordenadas_centro }}</span></div>
+          <div class="info-item"><strong>Aprobado por:</strong> <span>{{ selectedConglomerado?.aprobado_por || 'N/A' }}</span></div>
+          <div class="info-item"><strong>Precisión GPS:</strong> <span>{{ selectedConglomerado?.precision }}</span></div>
+          <div class="info-item"><strong>Fecha Aprobación:</strong> <span>{{ selectedConglomerado?.fecha_aprobacion || 'N/A' }}</span></div>
+          <div class="info-item">
+            <strong>Estado:</strong> 
+            <span>{{ (selectedConglomerado?.estado || '') | uppercase }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      <div class="modal-section">
+        <h3>Mapa de Subparcelas</h3>
+        <div #mapContainer id="map-container">
+          <div #mapElement id="map"></div>
+          <button id="calculateAreaBtn" class="floating-button" (click)="toggleAreaCalculator()">
+            <i class="fas fa-calculator"></i> {{ areaCalculatorOpen ? 'OCULTAR CALCULADORA' : 'CALCULAR ÁREA' }}
+          </button>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      <div class="modal-section">
+        <h3>Puntos de Referencia</h3>
+        <div class="punto-referencia">
+          <div><strong>Tipo:</strong> <span>{{ selectedConglomerado?.punto_referencia?.tipo || 'N/A' }}</span></div>
+          <div><strong>Azimut:</strong> <span>{{ selectedConglomerado?.punto_referencia?.azimut || 'N/A' }}</span></div>
+          <div><strong>Distancia horizontal:</strong> <span>{{ selectedConglomerado?.punto_referencia?.distancia_horizontal || 'N/A' }}</span></div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+      <div class="modal-section">
+        <h3>Subparcelas</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Subparcela</th>
+              <th>Radio</th>
+              <th>Azimut</th>
+              <th>Distancia al Centro</th>
+              <th>Materializado</th>
+              <th>Color</th>
+              <th>Posición</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subparcela of selectedConglomerado?.subparcelas">
+              <td>{{ subparcela.id }}</td>
+              <td>{{ subparcela.radio }}</td>
+              <td>{{ subparcela.azimut }}</td>
+              <td>{{ subparcela.distancia_centro }}</td>
+              <td>{{ subparcela.materializado }}</td>
+              <td>{{ subparcela.color }}</td>
+              <td>{{ subparcela.posicion }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="action-buttons">
+        <ng-container *ngIf="currentSection === 'conglomerados'">
+          <button *ngIf="selectedConglomerado?.estado === 'pendientes'" 
+                  class="action-button reject-button" 
+                  (click)="changeStatus('rechazados')">RECHAZAR</button>
+          <button *ngIf="selectedConglomerado?.estado === 'pendientes'" 
+                  class="action-button correct-button" 
+                  (click)="changeStatus('corregir')">CORREGIR</button>
+          <button *ngIf="selectedConglomerado?.estado === 'pendientes' || selectedConglomerado?.estado === 'rechazados'" 
+                  class="action-button approve-button" 
+                  (click)="changeStatus('aprobados')">APROBAR</button>
+          <button *ngIf="selectedConglomerado?.estado === 'aprobados'" 
+                  class="action-button reject-button" 
+                  (click)="changeStatus('rechazados')">RECHAZAR</button>
+        </ng-container>
+        <ng-container *ngIf="currentSection === 'papelera'">
+          <button class="action-button approve-button" (click)="selectedConglomerado && restoreConglomerado(selectedConglomerado.id)">RESTAURAR</button>
+          <button class="action-button reject-button" (click)="selectedConglomerado && deletePermanently(selectedConglomerado.id)">ELIMINAR PERMANENTEMENTE</button>
+        </ng-container>
       </div>
     </div>
   </div>

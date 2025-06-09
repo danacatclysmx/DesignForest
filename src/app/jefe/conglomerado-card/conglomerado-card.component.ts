@@ -5,8 +5,8 @@ import { DatePipe, UpperCasePipe } from '@angular/common';
   selector: 'app-conglomerado-card',
   templateUrl: './conglomerado-card.component.html',
   styleUrls: ['./conglomerado-card.component.css'],
-  standalone: true,  // <-- Importante
-  imports: [],
+  standalone: true,
+  imports: [UpperCasePipe],
   providers: [DatePipe, UpperCasePipe]
 })
 export class ConglomeradoCardComponent {
