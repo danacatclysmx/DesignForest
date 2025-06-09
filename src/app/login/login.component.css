@@ -10,15 +10,15 @@
 
 /* Define variables CSS reutilizables */
 :host {
-  --linear-grad: linear-gradient(to right, #7db352, #7db352);
-  --grad-clr1: #7db352;
-  --grad-clr2: #7db352;
+  --linear-grad: linear-gradient(to right, #69b352, #7db352);
+  --grad-clr1: #5c853a;
+  --grad-clr2: #5c853a;
 }
 
 /* Estilos generales del body del login */
 .class_body_login {
   height: 100vh;
-  background: #ffffff;
+  background: #f5f5eb;
   display: grid;
   place-content: center;
   font-family: "Poppins", sans-serif;
@@ -29,7 +29,7 @@
   position: relative;
   width: 850px;
   height: 500px;
-  background-color: #ffffff;
+  background-color: #d1ddd4da;
   box-shadow: 25px 30px 55px #5557;
   border-radius: 13px;
   overflow: hidden;
