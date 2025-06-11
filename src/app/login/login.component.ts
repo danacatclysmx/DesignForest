@@ -61,7 +61,7 @@ export class LoginComponent implements AfterViewInit {
    */
   @ViewChild('overlayBtn') overlayBtn!: ElementRef;
   @ViewChild('rememberMe', { static: false }) rememberMeCheckbox!: ElementRef<HTMLInputElement>;
-
+  showCookieBanner = false;
   // ============================================================================
   // PROPIEDADES DEL COMPONENTE
   // ============================================================================
@@ -94,10 +94,11 @@ export class LoginComponent implements AfterViewInit {
    */
   isRightPanelActive = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder, private router: Router, private cookieService: CookieService) {
     this.loginForm = this.fb.group({
       usuario: ['', [Validators.required]],
       contrasena: ['', [Validators.required]],
+      
     });
 
     /**
