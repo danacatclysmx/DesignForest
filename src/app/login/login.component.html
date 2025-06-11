@@ -196,12 +196,12 @@
     </div>
   </div>
   <!-- Banner de cookies (al final del archivo) -->
-        <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-banner" id="cookieBanner" *ngIf="showCookieBanner">
             <h3>Uso de Cookies</h3>
             <p>Utilizamos cookies para mejorar tu experiencia y recordar tus preferencias. Si continúas navegando, aceptas su uso. Consulta nuestra <a href="#" style="color: #7db352;">Política de Cookies</a> para más información.</p>
             <div class="cookie-buttons">
-                <button class="cookie-btn reject" id="rejectCookies">Rechazar</button>
-                <button class="cookie-btn accept" id="acceptCookies">Aceptar</button>
+                <button class="cookie-btn reject" id="rejectCookies" (click)="rejectCookies()">Rechazar</button>
+                <button class="cookie-btn accept" id="acceptCookies" (click)="acceptCookies()">Aceptar</button>
             </div>
-        </div>
+        </div> 
 </div>
