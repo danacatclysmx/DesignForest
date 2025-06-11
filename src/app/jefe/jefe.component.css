@@ -785,48 +785,54 @@ tr:nth-child(even) {
 }
 
 /* Estilos para la calculadora de áreas mejorada */
-/* Estilos para la calculadora de áreas mejorada */
 #area-controls {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    max-width: 300px;
-    font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  max-width: 300px;
+  font-size: 14px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  width: 240px;
 }
 
-/* Estilos para el contenedor de coordenadas */
 #mouse-coordinates {
-    background-color: #f8f8f8;
-    border-radius: 4px;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #e0e0e0;
-    font-size: 13px;
-    width: 100%; /* Ocupa todo el ancho disponible */
-    box-sizing: border-box; /* Incluye padding en el ancho */
-    display: flex; /* Para alinear en línea */
-    justify-content: space-between; /* Separa los elementos */
-    align-items: center; /* Centra verticalmente */
+  background-color: #f8f8f8;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #e0e0e0;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #mouse-coordinates strong {
-    color: var(--primary);
-    margin-right: 10px;
-    white-space: nowrap; /* Evita salto de línea */
+  color: var(--primary);
+  margin-right: 10px;
+  white-space: nowrap;
 }
 
 #mouse-coordinates .coordinates-values {
-    display: flex;
-    gap: 15px; /* Espacio entre lat y lng */
-    font-family: monospace; /* Mejor para coordenadas */
+  display: flex;
+  gap: 15px;
+  font-family: monospace;
 }
 
 #coordinates-list {
-    margin-top: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-    scrollbar-width: thin; /* Para Firefox */
+  max-height: 150px; /* Altura máxima antes de mostrar scroll */
+  overflow-y: auto;  /* Habilitar scroll vertical */
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin-top: 10px;
+  font-family: monospace;
+  padding-left: 10px;
 }
 
 /* Estilo de scroll para Chrome/Safari */
@@ -866,33 +872,42 @@ tr:nth-child(even) {
 
 .coord-item {
     display: flex;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: all 0.2s;
+    padding: 5px 0;
+    border-bottom: 1px solid #eeeeee;
 }
 
 .coord-item:hover {
-    background-color: #f0f0f0;
+  background-color: #e3f2fd; /* Color de fondo al pasar mouse */
+  cursor: pointer;
+}
+
+/* Estilo para elementos seleccionados */
+.coord-item.hovered {
+  background-color: var(--light);
+  font-weight: bold;
 }
 
 .coord-number, .coord-lat, .coord-lng {
-    flex: 1;
-    text-align: center;
-    font-family: monospace;
-    font-size: 13px;
+    padding: 0 5px;
+}
+
+.coord-number, .coord-lat, .coord-lng {
+  flex: 1;
+  text-align: center;
+  font-family: monospace;
+  font-size: 13px;
 }
 
 .coord-number {
-    font-weight: bold;
-    color: var(--primary);
+  font-weight: bold;
+  color: var(--primary);
 }
 
 .no-coords {
-    text-align: center;
-    color: #666;
-    font-style: italic;
-    padding: 10px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 10px;
 }
 
 .marker-number {
@@ -903,4 +918,11 @@ tr:nth-child(even) {
     font-weight: bold !important;
     font-size: 12px !important;
     margin-top: -1px !important;
+}
+
+/* Estilos para iconos en menú de opciones */
+.option-item i {
+  margin-right: 8px;
+  width: 20px;
+  text-align: center;
 }
