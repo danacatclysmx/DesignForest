@@ -1,12 +1,25 @@
 <div class="class_body_login">
-  <!-- Contenedor principal -->
+  <!-- 
+    CONTENEDOR PRINCIPAL DEL LOGIN
+    - Contiene todos los elementos del sistema de autenticación
+    - Maneja la transición entre formularios de login y registro
+  -->
   <div class="container" #container id="container">
-    <!-- Formulario para solicitar una cuenta nueva -->
+    <!-- 
+      FORMULARIO DE REGISTRO (SOLICITAR CUENTA)
+      - Inicialmente oculto (opacity: 0)
+      - Se muestra cuando el usuario hace clic en "Pídelo"
+      - Permite solicitar una nueva cuenta al sistema
+    -->
     <div class="form-container sign-up-container">
       <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
         <h1>Pide Tu cuenta</h1>
 
-        <!-- Campo para el nombre -->
+        <!-- 
+          CAMPO NOMBRE
+          - Input para capturar el nombre completo del usuario
+          - Incluye efectos de focus/blur para animaciones visuales
+        -->
         <div class="infield">
           <input
             type="text"
@@ -16,9 +29,14 @@
             (blur)="onInputBlur($event)"
           />
           <label></label>
+          <!-- Línea animada que aparece al hacer focus -->
         </div>
 
-        <!-- Campo para el cargo -->
+        <!-- 
+          CAMPO CARGO
+          - Input para especificar el puesto de trabajo
+          - Ayuda a identificar el rol del usuario en el sistema
+        -->
         <div class="infield">
           <input
             type="text"
@@ -30,7 +48,11 @@
           <label></label>
         </div>
 
-        <!-- Campo para el correo electrónico -->
+        <!-- 
+          CAMPO EMAIL
+          - Input tipo email con validación automática
+          - Usado para comunicación y recuperación de cuenta
+        -->
         <div class="infield">
           <input
             type="email"
@@ -42,17 +64,29 @@
           <label></label>
         </div>
 
-        <!-- Botón para solicitar la cuenta -->
+        <!-- 
+          BOTÓN ENVIAR SOLICITUD
+          - Ejecuta onRegisterSubmit() al hacer clic
+          - Envía los datos del formulario para crear la cuenta
+        -->
         <button class="styles_button" type="submit">Pidela</button>
       </form>
     </div>
 
-    <!-- Formulario de inicio de sesión -->
+    <!-- 
+      FORMULARIO DE INICIO DE SESIÓN
+      - Formulario principal visible por defecto
+      - Permite acceso con credenciales existentes
+    -->
     <div class="form-container sign-in-container">
       <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
         <h1>Iniciar sesión</h1>
 
-        <!-- Campo para el usuario -->
+        <!-- 
+          CAMPO USUARIO
+          - Input para nombre de usuario o email
+          - Campo requerido para autenticación
+        -->
         <div class="infield">
           <input
             type="text"
@@ -64,7 +98,11 @@
           <label></label>
         </div>
 
-        <!-- Campo para la contraseña -->
+        <!-- 
+          CAMPO CONTRASEÑA
+          - Input tipo password (oculta caracteres)
+          - Segundo factor de autenticación
+        -->
         <div class="infield">
           <input
             type="password"
@@ -83,32 +121,68 @@
           <label for="rememberMe">Recordar mi usuario</label>
         </div>
 
-        <!-- Enlace para recuperar contraseña -->
+        <!-- 
+          ENLACE RECUPERAR CONTRASEÑA
+          - Funcionalidad para usuarios que olvidan su contraseña
+          - Actualmente es un enlace placeholder (#)
+        -->
         <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
 
-        <!-- Botón para acceder -->
+        <!-- 
+          BOTÓN ACCEDER
+          - Ejecuta onLoginSubmit() para validar credenciales
+          - Redirige al usuario si la autenticación es exitosa
+        -->
         <button class="styles_button" type="submit">Acceder</button>
 
-        <!-- Mensaje de error -->
+        <!-- 
+          MENSAJE DE ERROR
+          - Se muestra condicionalmente si hay errores de login
+          - Proporciona feedback visual al usuario
+        -->
         <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
       </form>
     </div>
 
-    <!-- Contenedor de superposición (overlay) -->
+    <!-- 
+      SISTEMA DE OVERLAY ANIMADO
+      - Controla la transición visual entre formularios
+      - Contiene los paneles informativos y botones de cambio
+    -->
     <div class="overlay-container" id="overlayCon">
       <div class="overlay">
-        <!-- Panel de superposición izquierdo -->
+        <!-- 
+          PANEL IZQUIERDO DEL OVERLAY
+          - Visible cuando está activo el formulario de registro
+          - Invita al usuario a cambiar al login
+        -->
         <div class="overlay-panel overlay-left">
           <h1>FOREST TRACK</h1>
           <p><strong>Accede a tu cuenta</strong> y sigue donde lo dejaste.</p>
+          <!-- 
+            BOTÓN CAMBIAR A LOGIN
+            - Ejecuta togglePanel() para mostrar formulario de login
+          -->
           <button type="button" (click)="togglePanel()">Acceder</button>
         </div>
 
-        <!-- Panel de superposición derecho -->
+        <!-- 
+          PANEL DERECHO DEL OVERLAY
+          - Visible por defecto cuando está activo el login
+          - Invita al usuario a solicitar una cuenta nueva
+        -->
         <div class="overlay-panel overlay-right">
-          <!-- Logo de la aplicación -->
+          <!-- 
+            LOGO DE LA APLICACIÓN
+            - Imagen corporativa de Forest Track
+            - Ubicada en assets/logo.png
+          -->
           <img src="assets/logo.png" alt="Forest Track Logo" class="logo" />
           <p>¿No te han dado tu usuario?, <strong>Pídelo ahora!</strong></p>
+          <!-- 
+            BOTÓN CAMBIAR A REGISTRO
+            - Ejecuta togglePanel() para mostrar formulario de registro
+          -->
           <button type="button" (click)="togglePanel()">Pídelo</button>
         </div>
       </div>
@@ -123,7 +197,11 @@
             </div>
         </div>
 
-      <!-- Botón oculto para controlar el overlay -->
+      <!-- 
+        BOTÓN OCULTO DE CONTROL
+        - Elemento técnico para manejar animaciones del overlay
+        - No visible para el usuario pero necesario para las transiciones
+      -->
       <button #overlayBtn id="overlayBtn"></button>
     </div>
   </div>
