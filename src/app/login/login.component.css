@@ -332,3 +332,91 @@ p {
     width: 143.67px;
   }
 }
+
+/* Estilos para recordar usuario */
+.remember-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.remember-container input {
+  width: auto;
+  margin-right: 8px;
+}
+
+.remember-container label {
+  position: static;
+  transform: none;
+  color: #333;
+  font-size: 14px;
+  width: auto;
+  height: auto;
+  background: none;
+  cursor: pointer;
+}
+
+/* Estilos para el banner de cookies */
+.cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ffffff;
+    border: 1px solid #7db352;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    z-index: 1000;
+    transition: transform 0.5s ease;
+    transform: translateY(150%);
+}
+
+.cookie-banner.show {
+    transform: translateY(0);
+}
+
+.cookie-banner h3 {
+    color: #7db352;
+    margin-bottom: 10px;
+}
+
+.cookie-banner p {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.cookie-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cookie-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.cookie-btn.accept {
+    background: #7db352;
+    color: white;
+    border: none;
+}
+
+.cookie-btn.reject {
+    background: transparent;
+    color: #7db352;
+    border: 1px solid #7db352;
+}
+
+.cookie-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}

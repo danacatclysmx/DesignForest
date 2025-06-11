@@ -12,6 +12,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CookieService } from '../services/cookie.service'; // Ruta a tu servicio
 
 @Component({
   selector: 'app-login',
@@ -23,13 +24,16 @@ import { Router } from '@angular/router';
 export class LoginComponent implements AfterViewInit {
   @ViewChild('container') container!: ElementRef;
   @ViewChild('overlayBtn') overlayBtn!: ElementRef;
+  @ViewChild('rememberMe', { static: false }) rememberMeCheckbox!: ElementRef<HTMLInputElement>;
 
   loginForm: FormGroup;
   registerForm: FormGroup;
   errorMessage = '';
   isRightPanelActive = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  showCookieBanner = false;
+
+  constructor(private fb: FormBuilder, private router: Router, private cookieService: CookieService) {
     this.loginForm = this.fb.group({
       usuario: ['', [Validators.required]],
       contrasena: ['', [Validators.required]],
@@ -44,6 +48,29 @@ export class LoginComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.setupOverlayToggle();
+    this.checkSavedUser();
+    
+    // Mostrar banner de cookies si no hay consentimiento
+    if (!this.cookieService.checkCookie('cookieConsent')) {
+      setTimeout(() => {
+        this.showCookieBanner = true;
+        setTimeout(() => {
+          document.querySelector('.cookie-banner')?.classList.add('show');
+        }, 10);
+      }, 2000);
+    }
+  }
+
+  // Verificar usuario guardado
+  checkSavedUser() {
+    if (this.cookieService.checkCookie('rememberUser') && 
+        this.cookieService.getCookie('rememberUser') === 'true') {
+      const savedUsername = this.cookieService.getCookie('savedUsername');
+      if (savedUsername) {
+        this.loginForm.patchValue({ usuario: savedUsername });
+        this.rememberMeCheckbox.nativeElement.checked = true;
+      }
+    }
   }
 
   setupOverlayToggle() {
@@ -76,6 +103,17 @@ export class LoginComponent implements AfterViewInit {
   onLoginSubmit() {
     if (this.loginForm.valid) {
       const { usuario, contrasena } = this.loginForm.value;
+
+      // Guardar usuario si el checkbox está marcado y cookies aceptadas
+      if (this.cookieService.getCookie('cookieConsent') === 'accepted' && 
+          this.rememberMeCheckbox.nativeElement.checked) {
+        this.cookieService.setCookie('rememberUser', 'true', 30);
+        this.cookieService.setCookie('savedUsername', usuario, 30);
+      } else if (this.cookieService.getCookie('cookieConsent') === 'accepted') {
+        // Si desmarcó recordar usuario
+        this.cookieService.eraseCookie('rememberUser');
+        this.cookieService.eraseCookie('savedUsername');
+      }
 
       this.authenticateUser(usuario, contrasena)
         .then((redirectPath) => {
@@ -127,6 +165,17 @@ export class LoginComponent implements AfterViewInit {
         }
       }, 500);
     });
+  }
+  
+  // Manejar cookies
+  acceptCookies() {
+    this.cookieService.setCookie('cookieConsent', 'accepted', 365);
+    this.showCookieBanner = false;
+  }
+
+  rejectCookies() {
+    this.cookieService.setCookie('cookieConsent', 'rejected', 365);
+    this.showCookieBanner = false;
   }
 
   // Métodos para manejar el focus de los inputs
