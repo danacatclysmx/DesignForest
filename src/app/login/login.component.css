@@ -1,61 +1,101 @@
-/* Importa la fuente 'Poppins' desde Google Fonts con diferentes grosores */
+/* 
+  IMPORTACIÓN DE FUENTE GOOGLE FONTS
+  - Carga la fuente Poppins con todos los pesos disponibles
+  - Mejora la tipografía y legibilidad del componente
+*/
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
-/* Aplica un reset general */
+/* 
+  RESET CSS GLOBAL
+  - Elimina márgenes y padding por defecto del navegador
+  - Establece box-sizing: border-box para mejor control de dimensiones
+*/
 * {
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
 }
 
-/* Define variables CSS reutilizables */
+/* 
+  VARIABLES CSS PERSONALIZADAS
+  - Define colores reutilizables para el tema verde "bosque"
+  - Facilita el mantenimiento y cambios de color globales
+*/
 :host {
   --linear-grad: linear-gradient(to right, #69b352, #7db352);
   --grad-clr1: #5c853a;
   --grad-clr2: #5c853a;
 }
 
-/* Estilos generales del body del login */
+/* 
+  CONTENEDOR PRINCIPAL DEL BODY
+  - Ocupa toda la altura de la ventana (100vh)
+  - Centra el contenido usando CSS Grid
+  - Establece el fondo y la fuente base
+*/
 .class_body_login {
   height: 100vh;
-  background: #f5f5eb;
+  background: #f5f5eb; /* Fondo beige suave */
   display: grid;
-  place-content: center;
+  place-content: center; /* Centra horizontal y verticalmente */
   font-family: "Poppins", sans-serif;
 }
 
-/* Contenedor principal del formulario login/registro */
+/* 
+  CONTENEDOR PRINCIPAL DEL FORMULARIO
+  - Define las dimensiones fijas del componente de login
+  - Aplica sombra y bordes redondeados para un look moderno
+  - Oculta el contenido que se desborde (overflow: hidden)
+*/
 .container {
   position: relative;
   width: 850px;
   height: 500px;
-  background-color: #d1ddd4da;
-  box-shadow: 25px 30px 55px #5557;
+  background-color: #d1ddd4da; /* Verde grisáceo con transparencia */
+  box-shadow: 25px 30px 55px #5557; /* Sombra profunda */
   border-radius: 13px;
-  overflow: hidden;
+  overflow: hidden; /* Importante para las animaciones */
 }
 
-/* Contenedor del formulario */
+/* 
+  CONTENEDOR BASE PARA FORMULARIOS
+  - Posicionamiento absoluto para permitir superposición
+  - Ocupa 60% del ancho del contenedor principal
+  - Transición suave para animaciones de cambio
+*/
 .form-container {
   position: absolute;
   width: 60%;
   height: 100%;
   padding: 0px 40px;
-  transition: all 0.6s ease-in-out;
+  transition: all 0.6s ease-in-out; /* Animación suave */
 }
 
-/* Contenedor del formulario de registro */
+/* 
+  CONTENEDOR DEL FORMULARIO DE REGISTRO
+  - Inicialmente invisible (opacity: 0)
+  - z-index bajo para que esté detrás del login
+*/
 .sign-up-container {
   opacity: 0;
   z-index: 1;
 }
 
-/* Contenedor del formulario de login */
+/* 
+  CONTENEDOR DEL FORMULARIO DE LOGIN
+  - Visible por defecto
+  - z-index alto para que esté al frente
+*/
 .sign-in-container {
   z-index: 2;
 }
 
-/* Estilos generales de los formularios */
+/* 
+  ESTILOS GENERALES DE FORMULARIOS
+  - Flexbox para centrar contenido vertical y horizontalmente
+  - Ocupa toda la altura disponible
+  - Padding interno para espaciado
+*/
 form {
   height: 100%;
   display: flex;
@@ -65,19 +105,31 @@ form {
   padding: 0px 50px;
 }
 
-/* Títulos dentro del formulario */
+/* 
+  TÍTULOS DE LOS FORMULARIOS
+  - Color verde que coincide con el tema del bosque
+*/
 h1 {
   color: #7db352;
 }
 
-/* Contenedor individual para cada campo de input */
+/* 
+  CONTENEDOR INDIVIDUAL DE CADA INPUT
+  - Posición relativa para permitir el label animado
+  - Margen vertical para separación entre campos
+*/
 .infield {
   position: relative;
   margin: 8px 0px;
   width: 100%;
 }
 
-/* Campos de entrada (input) */
+/* 
+  ESTILOS DE LOS CAMPOS DE ENTRADA
+  - Fondo gris claro sin bordes para look minimalista
+  - Padding interno para comodidad del usuario
+  - Sin outline para evitar bordes del navegador
+*/
 input {
   width: 100%;
   padding: 12px 8px;
@@ -86,7 +138,12 @@ input {
   outline: none;
 }
 
-/* Línea de efecto debajo del input */
+/* 
+  LÍNEA ANIMADA DEBAJO DE LOS INPUTS
+  - Inicialmente invisible (width: 0%)
+  - Se expande cuando el input recibe focus
+  - Gradiente verde para mantener consistencia visual
+*/
 label {
   position: absolute;
   left: 50%;
@@ -95,10 +152,14 @@ label {
   width: 0%;
   height: 2px;
   background: linear-gradient(to right, #7db352, #7db352);
-  transition: 0.3s;
+  transition: 0.3s; /* Animación suave de expansión */
 }
 
-/* Estilo de todos los enlaces */
+/* 
+  ESTILOS GENERALES PARA ENLACES
+  - Color oscuro y tamaño pequeño
+  - Sin decoración de texto por defecto
+*/
 a {
   color: #333;
   font-size: 14px;
@@ -106,18 +167,30 @@ a {
   margin: 15px 0px;
 }
 
-/* Estilo específico para el enlace "¿Olvidaste tu contraseña?" */
+/* 
+  ENLACE "OLVIDASTE TU CONTRASEÑA"
+  - Borde inferior sutil para indicar interactividad
+  - Padding inferior para separar del borde
+*/
 a.forgot {
   padding-bottom: 3px;
   border-bottom: 2px solid #eee;
 }
 
-/* Efecto hover para el enlace de contraseña */
+/* 
+  EFECTO HOVER PARA ENLACE DE CONTRASEÑA
+  - Cambia a color claro cuando se pasa el mouse
+*/
 .forgot:hover {
   color: #f7efde;
 }
 
-/* Botones principales del formulario */
+/* 
+  BOTONES PRINCIPALES DEL FORMULARIO
+  - Diseño redondeado con colores del tema verde
+  - Texto en mayúsculas y espaciado de letras para énfasis
+  - Transición suave para efectos hover
+*/
 .styles_button {
   border-radius: 20px;
   border: 1px solid #7db352;
@@ -132,55 +205,87 @@ a.forgot {
   transition: all 0.3s ease;
 }
 
-/* Hover de los botones */
+/* 
+  EFECTO HOVER PARA BOTONES PRINCIPALES
+  - Cambia a fondo claro y se eleva ligeramente
+  - Proporciona feedback visual al usuario
+*/
 .styles_button:hover {
   background: #e9dcbd;
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* Efecto de elevación */
 }
 
-/* Botones dentro de los formularios */
+/* 
+  BOTONES DENTRO DE FORMULARIOS
+  - Margen superior para separación
+  - Transición rápida para responsividad
+*/
 .form-container button {
   margin-top: 17px;
   transition: 80ms ease-in;
 }
 
-/* Hover corregido para botones de formulario */
+/* 
+  HOVER ESPECÍFICO PARA BOTONES DE FORMULARIO
+  - Invierte los colores (fondo blanco, texto verde)
+  - Mantiene la identidad visual del tema
+*/
 .form-container button:hover {
   background: #fff;
   color: #7db352;
 }
 
-/* Mensajes de error */
+/* 
+  MENSAJES DE ERROR
+  - Color rojo para indicar problemas
+  - Centrado y con altura mínima para consistencia
+  - Tamaño de fuente pequeño pero legible
+*/
 .error {
   color: #ff4444;
   font-size: 14px;
   margin: 10px 0;
   text-align: center;
-  min-height: 20px;
+  min-height: 20px; /* Evita saltos de layout */
 }
 
-/* Estilo de imagen/logo */
+/* 
+  LOGO DE LA APLICACIÓN
+  - Dimensiones cuadradas grandes para impacto visual
+  - Centrado horizontalmente
+  - Margen negativo superior para posicionamiento especial
+*/
 .logo {
   width: 200px;
   height: 200px;
   display: block;
   margin: 0 auto;
-  margin-top: -150px;
+  margin-top: -150px; /* Posicionamiento especial */
 }
 
-/* Contenedor del overlay */
+/* 
+  CONTENEDOR DEL SISTEMA DE OVERLAY
+  - Posicionado en el lado derecho (40% del ancho)
+  - Maneja las transiciones entre paneles
+  - z-index alto para estar sobre los formularios
+*/
 .overlay-container {
   position: absolute;
   top: 0;
-  left: 60%;
+  left: 60%; /* Comienza donde terminan los formularios */
   width: 40%;
   height: 100%;
   overflow: hidden;
   transition: transform 0.6s ease-in-out;
-  z-index: 9;
+  z-index: 9; /* Por encima de los formularios */
 }
 
-/* Botón que activa la transición del overlay */
+/* 
+  BOTÓN OCULTO DE CONTROL DEL OVERLAY
+  - Elemento técnico para manejar animaciones
+  - Posicionado en el centro del overlay
+  - Transparente pero funcional
+*/
 #overlayBtn {
   cursor: pointer;
   position: absolute;
@@ -194,25 +299,39 @@ a.forgot {
   border-radius: 20px;
 }
 
-/* Hover en el botón de overlay */
+/* 
+  EFECTO HOVER PARA BOTÓN DE OVERLAY
+  - Oscurece ligeramente y añade sombra
+  - Proporciona feedback visual sutil
+*/
 #overlayBtn:hover {
   filter: brightness(90%);
   background: rgba(20, 30, 48, 0.2);
   box-shadow: 0px 4px 10px rgba(20, 30, 48, 0.3);
 }
 
-/* Fondo del overlay */
+/* 
+  FONDO DEL OVERLAY
+  - Gradiente verde que cubre toda el área
+  - Inicialmente posicionado fuera de vista (-150%)
+  - Ancho extra (250%) para permitir animaciones
+*/
 .overlay {
   position: relative;
   background: linear-gradient(to right, #7db352, #7db352);
   color: #fff;
-  left: -150%;
+  left: -150%; /* Fuera de vista inicialmente */
   height: 100%;
-  width: 250%;
+  width: 250%; /* Ancho extra para animaciones */
   transition: transform 0.6s ease-in-out;
 }
 
-/* Paneles de contenido del overlay */
+/* 
+  PANELES DE CONTENIDO DEL OVERLAY
+  - Flexbox para centrar contenido
+  - Posicionamiento absoluto para control preciso
+  - Transiciones suaves para cambios de estado
+*/
 .overlay-panel {
   position: absolute;
   display: flex;
@@ -226,24 +345,40 @@ a.forgot {
   transition: 0.6s ease-in-out;
 }
 
-/* Panel izquierdo */
+/* 
+  PANEL IZQUIERDO DEL OVERLAY
+  - Posicionado en el lado derecho inicialmente
+  - Se muestra cuando el formulario de registro está activo
+*/
 .overlay-left {
   right: 60%;
   transform: translateX(-12%);
 }
 
-/* Panel derecho */
+/* 
+  PANEL DERECHO DEL OVERLAY
+  - Posicionado en el extremo derecho
+  - Visible por defecto cuando el login está activo
+*/
 .overlay-right {
   right: 0;
   transform: translateX(0%);
 }
 
-/* Títulos de los paneles */
+/* 
+  TÍTULOS DE LOS PANELES DEL OVERLAY
+  - Color oscuro para contraste con el fondo verde
+*/
 .overlay-panel h1 {
   color: #141e30;
 }
 
-/* Párrafos dentro de los paneles */
+/* 
+  PÁRRAFOS DENTRO DE LOS PANELES
+  - Tipografía ligera y espaciado generoso
+  - Color oscuro para legibilidad
+  - Espaciado de letras para elegancia
+*/
 p {
   font-size: 14px;
   font-weight: 300;
@@ -253,7 +388,12 @@ p {
   color: #141e30;
 }
 
-/* Botones dentro del overlay */
+/* 
+  BOTONES DENTRO DEL OVERLAY
+  - Estilo minimalista con fondo transparente
+  - Texto oscuro para contraste
+  - Bordes redondeados para consistencia
+*/
 .overlay-panel button {
   border: none;
   background-color: transparent;
@@ -266,42 +406,61 @@ p {
   transition: all 0.3s ease;
 }
 
-/* Hover de los botones del overlay */
+/* 
+  EFECTO HOVER PARA BOTONES DEL OVERLAY
+  - Fondo semi-transparente blanco
+  - Sombra sutil para profundidad
+*/
 .overlay-panel button:hover {
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
 }
 
-/* Animaciones para cambiar entre login y registro */
+/* 
+  ANIMACIONES PARA CAMBIO A MODO REGISTRO
+  - Se activan cuando se añade la clase 'right-panel-active'
+  - Mueven y transforman todos los elementos para mostrar el registro
+*/
+
+/* Mueve el contenedor del overlay hacia la izquierda */
 .right-panel-active .overlay-container {
   transform: translateX(-150%);
 }
 
+/* Mueve el fondo del overlay */
 .right-panel-active .overlay {
   transform: translateX(50%);
 }
 
+/* Reposiciona el panel izquierdo */
 .right-panel-active .overlay-left {
   transform: translateX(25%);
 }
 
+/* Reposiciona el panel derecho */
 .right-panel-active .overlay-right {
   transform: translateX(35%);
 }
 
+/* Oculta el formulario de login */
 .right-panel-active .sign-in-container {
   transform: translateX(20%);
   opacity: 0;
 }
 
+/* Muestra el formulario de registro con animación */
 .right-panel-active .sign-up-container {
   transform: translateX(66.7%);
   opacity: 1;
   z-index: 5;
-  animation: show 0.6s;
+  animation: show 0.6s; /* Animación personalizada */
 }
 
-/* Animación keyframes para mostrar el registro */
+/* 
+  ANIMACIÓN KEYFRAMES PARA MOSTRAR REGISTRO
+  - Controla la opacidad y z-index durante la transición
+  - Evita parpadeos durante el cambio de formularios
+*/
 @keyframes show {
   0%,
   50% {
@@ -315,20 +474,29 @@ p {
   }
 }
 
-/* Animación especial que agranda y reduce el botón */
+/* 
+  CLASE PARA ANIMACIÓN DE ESCALA DEL BOTÓN
+  - Se aplica dinámicamente para efectos especiales
+  - Agranda y reduce el botón para llamar la atención
+*/
 .btnScaled {
   animation: scaleBtn 0.6s;
 }
 
-/* Keyframes de la animación de escala */
+/* 
+  KEYFRAMES PARA ANIMACIÓN DE ESCALA
+  - Aumenta el ancho del botón al 50% de la animación
+  - Regresa al tamaño original al final
+  - Crea un efecto de "pulso" visual
+*/
 @keyframes scaleBtn {
   0% {
     width: 143.67px;
   }
   50% {
-    width: 250px;
+    width: 250px; /* Máximo ensanchamiento */
   }
   100% {
-    width: 143.67px;
+    width: 143.67px; /* Regresa al tamaño original */
   }
 }
