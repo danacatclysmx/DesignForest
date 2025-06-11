@@ -25,6 +25,12 @@ interface Conglomerado {
   subparcelas: any[];
 }
 
+interface Coordinate {
+  id: number;
+  lat: number;
+  lng: number;
+}
+
 @Component({
   selector: 'app-jefe',
   standalone: true,
@@ -45,7 +51,6 @@ export class JefeComponent implements AfterViewInit, OnDestroy {
   modalEditarOpen = false;
   modalDetallesOpen = false;
   showMenuId: string | null = null;
-  areaCalculatorOpen = false;
 
   conglomerados: Conglomerado[] = [];
   papelera: Conglomerado[] = [];
@@ -62,17 +67,21 @@ export class JefeComponent implements AfterViewInit, OnDestroy {
   containerCircle: any;
   circles: any[] = [];
   
-  areaDrawingMode = false;
-  areaPoints: any[] = [];
-  areaMarkers: any[] = [];
-  areaLines: any[] = [];
-  areaPolygon: any;
-  coordinateList: any[] = [];
+  areaCalculatorVisible = false;
+    areaDrawingMode = false;
+    areaPoints: L.LatLng[] = [];
+    areaMarkers: L.CircleMarker[] = [];
+    areaLines: L.Polyline[] = [];
+    areaPolygon: L.Polygon | null = null;
+    coordinateList: Coordinate[] = [];
+    currentHoveredPoint: number | null = null;  
 
   conglomeradoForm: FormGroup;
   editarForm: FormGroup;
 
   constructor(private fb: FormBuilder, private router: Router) {
+    this.highlightPoint = this.highlightPoint.bind(this);
+    this.unhighlightPoint = this.unhighlightPoint.bind(this);
     this.conglomeradoForm = this.fb.group({
       fechaInicio: ['', Validators.required],
       fechaFin: ['', Validators.required],
@@ -141,12 +150,12 @@ export class JefeComponent implements AfterViewInit, OnDestroy {
 
   closeDetailsModal() {
     this.modalDetallesOpen = false;
-    this.areaCalculatorOpen = false;
     if (this.detailsMap) {
       this.detailsMap.remove();
       this.detailsMap = null;
     }
     this.clearAreaDrawing();
+    this.disableAreaDrawing(); 
   }
 
   toggleOptionsMenu(event: Event, id: string) {
@@ -333,9 +342,16 @@ export class JefeComponent implements AfterViewInit, OnDestroy {
       }
       
       this.modalDetallesOpen = true;
+      
       setTimeout(() => {
         this.initDetailsMap();
         this.generateSubparcelsOnMap();
+        
+        // Agregar esto:
+        const calculateBtn = document.getElementById('calculateAreaBtn');
+        if (calculateBtn) {
+          calculateBtn.addEventListener('click', () => this.toggleAreaCalculator());
+        }
       }, 300);
     }
   }
@@ -482,142 +498,261 @@ export class JefeComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  toggleAreaCalculator() {
-    this.areaCalculatorOpen = !this.areaCalculatorOpen;
-    
-    if (this.areaCalculatorOpen) {
-      this.clearAreaDrawing();
-    } else {
-      this.disableAreaDrawing();
+   // === FUNCIONES CALCULADORA DE ÁREA ===
+    toggleAreaCalculator() {
+        this.areaCalculatorVisible = !this.areaCalculatorVisible;
+        
+        const calculateBtn = document.querySelector('.floating-button');
+        if (calculateBtn) {
+            if (this.areaCalculatorVisible) {
+                calculateBtn.innerHTML = '<i class="fas fa-times"></i> OCULTAR CALCULADORA';
+                this.clearAreaDrawing();
+            } else {
+                calculateBtn.innerHTML = '<i class="fas fa-calculator"></i> CALCULAR ÁREA';
+                this.disableAreaDrawing();
+            }
+        }
     }
-  }
 
-  enableAreaDrawing() {
-    this.areaDrawingMode = true;
-    this.areaPoints = [];
-    this.coordinateList = [];
-    this.clearAreaDrawing();
-    
-    this.detailsMap.getContainer().style.cursor = 'crosshair';
-    this.detailsMap.on('click', this.addAreaPoint.bind(this));
-    this.detailsMap.on('mousemove', this.showMouseCoordinates.bind(this));
-  }
+    enableAreaDrawing() {
+        // Limpiar dibujo existente antes de comenzar uno nuevo
+        this.clearAreaDrawing();
+        
+        this.areaDrawingMode = true;
+        
+        if (this.detailsMap) {
+            this.detailsMap.getContainer().style.cursor = 'crosshair';
+            this.detailsMap.on('click', this.addAreaPoint);
+            this.detailsMap.on('mousemove', this.showMouseCoordinates);
+        }
 
-  clearAreaDrawing() {
-    this.areaMarkers.forEach(marker => marker.remove());
-    this.areaLines.forEach(line => line.remove());
-    if (this.areaPolygon) this.areaPolygon.remove();
-    
-    this.areaMarkers = [];
-    this.areaLines = [];
-    this.areaPolygon = null;
-    this.areaPoints = [];
-    this.coordinateList = [];
-  }
-
-  disableAreaDrawing() {
-    this.areaDrawingMode = false;
-    if (this.detailsMap) {
-      this.detailsMap.getContainer().style.cursor = '';
-      this.detailsMap.off('click');
-      this.detailsMap.off('mousemove');
+        const coordsContainer = document.getElementById('mouse-coordinates');
+        if (coordsContainer) {
+            coordsContainer.innerHTML = '<strong>Coordenadas actuales:</strong><br>Mueva el mouse sobre el mapa';
+            coordsContainer.style.display = 'block';
+        }
     }
-  }
 
-  addAreaPoint(e: any) {
-    if (!this.areaDrawingMode) return;
-    
-    const point = e.latlng;
-    this.areaPoints.push(point);
-    
-    this.coordinateList.push({
-      id: this.coordinateList.length + 1,
-      lat: point.lat,
-      lng: point.lng
-    });
-    
-    const marker = L.circleMarker(point, {
-      radius: 8,
-      color: '#ffffff',
-      fillColor: '#000000',
-      fillOpacity: 1,
-      weight: 2
-    }).addTo(this.detailsMap);
-    
-    marker.bindTooltip((this.coordinateList.length).toString(), {
-      permanent: true,
-      direction: 'center',
-      className: 'marker-number'
-    });
-    
-    this.areaMarkers.push(marker);
-    
-    if (this.areaPoints.length > 1) {
-      const points = [this.areaPoints[this.areaPoints.length - 2], this.areaPoints[this.areaPoints.length - 1]];
-      const line = L.polyline(points, {color: '#ff0000', weight: 2}).addTo(this.detailsMap);
-      this.areaLines.push(line);
+    disableAreaDrawing() {
+        this.areaDrawingMode = false;
+        
+        if (this.detailsMap) {
+            this.detailsMap.getContainer().style.cursor = '';
+            this.detailsMap.off('click', this.addAreaPoint);
+            this.detailsMap.off('mousemove', this.showMouseCoordinates);
+        }
     }
-    
-    if (this.areaPoints.length >= 3) {
-      if (this.areaPolygon) this.areaPolygon.remove();
-      this.areaPolygon = L.polygon(this.areaPoints, {
-        color: '#ff5722',
-        weight: 2,
-        fillColor: '#ff5722',
-        fillOpacity: 0.2
-      }).addTo(this.detailsMap);
-      this.calculateArea();
-    }
-  }
 
-  showMouseCoordinates(e: any) {
-    if (!this.areaDrawingMode) return;
-    
-    const coordsContainer = document.getElementById('mouse-coordinates');
-    if (coordsContainer) {
-      coordsContainer.innerHTML = `
-        <strong>Coordenadas actuales:</strong>
-        <div class="coordinates-values">
-          <span>Lat: ${e.latlng.lat.toFixed(6)}</span>
-          <span>Lng: ${e.latlng.lng.toFixed(6)}</span>
-        </div>
-      `;
+    clearAreaDrawing() {
+        this.areaMarkers.forEach(marker => marker.remove());
+        this.areaLines.forEach(line => line.remove());
+        
+        if (this.areaPolygon) {
+            this.areaPolygon.remove();
+        }
+        
+        this.areaMarkers = [];
+        this.areaLines = [];
+        this.areaPolygon = null;
+        this.areaPoints = [];
+        this.coordinateList = [];
+        this.currentHoveredPoint = null;
+        
+        const areaResult = document.getElementById('area-result');
+        if (areaResult) {
+            areaResult.textContent = '';
+        }
+        
+        const coordsContainer = document.getElementById('mouse-coordinates');
+        if (coordsContainer) {
+            coordsContainer.textContent = '';
+            coordsContainer.style.display = 'none';
+        }
+        
+        this.updateCoordinateList();
     }
-  }
 
-  calculateArea() {
-    if (this.areaPoints.length < 3) return;
-    
-    let area = 0;
-    const n = this.areaPoints.length;
-    
-    for (let i = 0; i < n; i++) {
-      const j = (i + 1) % n;
-      const xi = this.areaPoints[i].lng * Math.PI / 180;
-      const yi = this.areaPoints[i].lat * Math.PI / 180;
-      const xj = this.areaPoints[j].lng * Math.PI / 180;
-      const yj = this.areaPoints[j].lat * Math.PI / 180;
+    showMouseCoordinates = (e: L.LeafletMouseEvent) => {
+        if (!this.areaDrawingMode || !this.detailsMap) return;
+        
+        const coordsContainer = document.getElementById('mouse-coordinates');
+        if (coordsContainer) {
+            coordsContainer.innerHTML = `
+                <strong>Coordenadas actuales:</strong>
+                <div class="coordinates-values">
+                    <span>Lat: ${e.latlng.lat.toFixed(6)}</span>
+                    <span>Lng: ${e.latlng.lng.toFixed(6)}</span>
+                </div>
+            `;
+        }
+    }
+
+    addAreaPoint = (e: L.LeafletMouseEvent) => {
+        if (!this.areaDrawingMode || !this.detailsMap) return;
+        
+        const point = e.latlng;
+        this.areaPoints.push(point);
+        
+        this.coordinateList.push({
+            id: this.coordinateList.length + 1,
+            lat: point.lat,
+            lng: point.lng
+        });
+        
+        this.updateCoordinateList();
+        
+        const marker = L.circleMarker(point, {
+            radius: 8,
+            color: '#ffffff',   // Borde blanco (antes era verde)
+            fillColor: '#000000', // Relleno negro
+            fillOpacity: 1,
+            weight: 2
+        }).addTo(this.detailsMap);
+        
+        marker.bindTooltip((this.coordinateList.length).toString(), {
+            permanent: true,
+            direction: 'center',
+            className: 'marker-number',
+        });
+        
+        marker.on('mouseover', () => this.highlightPoint(this.areaMarkers.length));
+        marker.on('mouseout', () => this.unhighlightPoint(this.areaMarkers.length));
+        
+        this.areaMarkers.push(marker);
+        
+        if (this.areaPoints.length > 1) {
+            const lastPoints = [this.areaPoints[this.areaPoints.length - 2], point];
+            const line = L.polyline(lastPoints, {color: '#ff0000', weight: 2}).addTo(this.detailsMap);
+            this.areaLines.push(line);
+        }
+        
+        if (this.areaPoints.length >= 3) {
+            if (this.areaPolygon) {
+                this.areaPolygon.remove();
+            }
+            this.areaPolygon = L.polygon(this.areaPoints, {
+                color: '#ff5722',
+                weight: 2,
+                fillColor: '#ff5722',
+                fillOpacity: 0.2
+            }).addTo(this.detailsMap);
+            
+            this.calculateArea();
+        }
+    }
+
+    updateCoordinateList() {
+      const coordsListContainer = document.getElementById('coordinates-list');
+      if (!coordsListContainer) return;
       
-      area += xi * yj - xj * yi;
+      if (this.coordinateList.length === 0) {
+        coordsListContainer.innerHTML = '<p class="no-coords">No hay puntos seleccionados</p>';
+        return;
+      }
+      
+      let html = '<div class="coordinates-header">';
+      html += '<span>#</span>';
+      html += '<span>Latitud</span>';
+      html += '<span>Longitud</span>';
+      html += '</div>';
+      
+      this.coordinateList.forEach((coord, index) => {
+        html += `
+          <div class="coord-item" 
+              data-index="${index}"
+              (mouseenter)="highlightPoint(${index})"
+              (mouseleave)="unhighlightPoint(${index})">
+            <span class="coord-number">${index + 1}</span>
+            <span class="coord-lat">${coord.lat.toFixed(6)}</span>
+            <span class="coord-lng">${coord.lng.toFixed(6)}</span>
+          </div>
+        `;
+      });
+      
+      coordsListContainer.innerHTML = html;
+      
+      // Agregar event listeners
+      const coordItems = coordsListContainer.querySelectorAll('.coord-item');
+      coordItems.forEach((item, index) => {
+        item.addEventListener('mouseenter', () => this.highlightPoint(index));
+        item.addEventListener('mouseleave', () => this.unhighlightPoint(index));
+      });
     }
-    
-    area = Math.abs(area) / 2;
-    
-    const earthRadius = 6378137;
-    const areaM2 = area * earthRadius * earthRadius;
-    
-    let resultText = `Área: ${areaM2.toFixed(2)} m²`;
-    
-    if (areaM2 > 10000) {
-      const hectares = areaM2 / 10000;
-      resultText += ` (${hectares.toFixed(4)} ha)`;
+
+    highlightPoint(index: number) {
+      if (index >= 0 && index < this.areaMarkers.length) {
+        // Resaltar marcador en el mapa
+        this.areaMarkers[index].setStyle({
+          radius: 10,
+          fillColor: '#ff0000',
+          weight: 3
+        });
+        
+        // Resaltar item en la lista
+        const coordItems = document.querySelectorAll('.coord-item');
+        coordItems.forEach(item => item.classList.remove('hovered'));
+        if (coordItems[index]) {
+          coordItems[index].classList.add('hovered');
+        }
+      }
     }
-    
-    const areaResult = document.getElementById('area-result');
-    if (areaResult) {
-      areaResult.textContent = resultText;
+
+    unhighlightPoint(index: number) {
+      if (index >= 0 && index < this.areaMarkers.length) {
+        // Restaurar estilo del marcador
+        this.areaMarkers[index].setStyle({
+          radius: 8,
+          fillColor: '#000000',
+          weight: 2
+        });
+        
+        // Quitar resaltado del item
+        const coordItems = document.querySelectorAll('.coord-item');
+        if (coordItems[index]) {
+          coordItems[index].classList.remove('hovered');
+        }
+      }
     }
-  }
+
+    
+
+    calculateArea() {
+        if (this.areaPoints.length < 3) return;
+        
+        let area = 0;
+        const n = this.areaPoints.length;
+        
+        for (let i = 0; i < n; i++) {
+            const j = (i + 1) % n;
+            const xi = this.areaPoints[i].lng * Math.PI / 180;
+            const yi = this.areaPoints[i].lat * Math.PI / 180;
+            const xj = this.areaPoints[j].lng * Math.PI / 180;
+            const yj = this.areaPoints[j].lat * Math.PI / 180;
+            
+            area += xi * yj - xj * yi;
+        }
+        
+        area = Math.abs(area) / 2;
+        
+        const earthRadius = 6378137;
+        const areaM2 = area * earthRadius * earthRadius;
+        
+        let resultText = `Área: ${areaM2.toFixed(2)} m²`;
+    
+        if (areaM2 > 10000) {
+            const hectares = areaM2 / 10000;
+            resultText += ` (${hectares.toFixed(4)} ha)`;
+        }
+        
+        const areaResult = document.getElementById('area-result');
+        if (areaResult) {
+            areaResult.innerHTML = `
+                <div style="margin-top: 10px; font-weight: bold;">
+                    ${resultText}
+                </div>
+            `;
+        }
+    }
 
   parseDMS(coordenadas: string): [number, number] | null {
     // Limpiar la cadena de coordenadas

@@ -1,3 +1,8 @@
+<head>
+
+  <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
 <div class="body">
   <div class="container">
     <!-- Menú hamburguesa -->
@@ -17,27 +22,29 @@
       </div>
       <ul class="sidebar-menu">
         <li class="menu-item" [class.active]="currentSection === 'conglomerados'" 
-            (click)="setCurrentSection('conglomerados')" data-section="conglomerados">
-          <i class="fas fa-list"></i>
+            (click)="setCurrentSection('conglomerados')">
+          <i class="fas fa-list"></i> <!-- Icono de lista -->
           <span>Lista de Conglomerados</span>
         </li>
         <li class="menu-item" [class.active]="currentSection === 'papelera'" 
-            (click)="setCurrentSection('papelera')" data-section="papelera">
-          <i class="fas fa-trash"></i>
+            (click)="setCurrentSection('papelera')">
+          <i class="fas fa-trash"></i> <!-- Icono de papelera -->
           <span>Papelera</span>
         </li>
       </ul>
-      <div class="logout-button" id="logoutButton" (click)="logout()">
-        <i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN
+      <div class="logout-button" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> <!-- Icono de salida -->
+        CERRAR SESIÓN
       </div>
-      <div class="create-button" id="createButton" (click)="abrirCrear()">
-        <i class="fas fa-plus"></i> CREAR
+      <div class="create-button" (click)="abrirCrear()">
+        <i class="fas fa-plus"></i> <!-- Icono de agregar -->
+        CREAR
       </div>
     </div>
 
     <!-- Modal Crear -->
-    <div class="modal-overlay" [class.open]="modalCrearOpen">
-      <div class="modal-content">
+    <div class="modal-overlay" [class.open]="modalCrearOpen" (click)="cerrarModalCrear()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <div class="modal-title">CREAR NUEVO CONGLOMERADO</div>
           <button class="close-button" (click)="cerrarModalCrear()">&times;</button>
@@ -88,8 +95,8 @@
     </div>
 
     <!-- Modal Editar -->
-    <div class="modal-overlay" [class.open]="modalEditarOpen">
-      <div class="modal-content">
+    <div class="modal-overlay" [class.open]="modalEditarOpen" (click)="cerrarModalEditar()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <div class="modal-title">EDITAR CONGLOMERADO {{ editingConglomerado?.id }}</div>
           <button class="close-button" (click)="cerrarModalEditar()">&times;</button>
@@ -178,14 +185,25 @@
           </button>
           <div class="options-dropdown" [class.show]="showMenuId === conglomerado.id">
             <ng-container *ngIf="currentSection === 'conglomerados'">
-              <div class="option-item" (click)="editConglomerado(conglomerado.id)">EDITAR</div>
-              <div class="option-item" (click)="deleteConglomerado(conglomerado.id)">ELIMINAR</div>
+              <div class="option-item" (click)="editConglomerado(conglomerado.id)">
+                <i class="fas fa-edit"></i> EDITAR <!-- Icono de editar -->
+              </div>
+              <div class="option-item" (click)="deleteConglomerado(conglomerado.id)">
+                <i class="fas fa-trash"></i> ELIMINAR <!-- Icono de eliminar -->
+              </div>
             </ng-container>
             <ng-container *ngIf="currentSection === 'papelera'">
-              <div class="option-item" (click)="restoreConglomerado(conglomerado.id)">RESTAURAR</div>
-              <div class="option-item delete-permanently" (click)="deletePermanently(conglomerado.id)">ELIMINAR PERMANENTEMENTE</div>
+              <div class="option-item" (click)="restoreConglomerado(conglomerado.id)">
+                <i class="fas fa-undo"></i> RESTAURAR <!-- Icono de restaurar -->
+              </div>
+              <div class="option-item delete-permanently" 
+                  (click)="deletePermanently(conglomerado.id)">
+                <i class="fas fa-fire-alt"></i> ELIMINAR PERMANENTEMENTE <!-- Icono de eliminar -->
+              </div>
             </ng-container>
-            <div class="option-item" (click)="showDetails(conglomerado.id)">VER DETALLES</div>
+            <div class="option-item" (click)="showDetails(conglomerado.id)">
+              <i class="fas fa-info-circle"></i> VER DETALLES <!-- Icono de detalles -->
+            </div>
           </div>
         </div>
         
@@ -210,8 +228,8 @@
   </div>
 
   <!-- Modal Detalles -->
-  <div class="modal-overlay" [class.open]="modalDetallesOpen">
-    <div class="modal-content">
+  <div class="modal-overlay" [class.open]="modalDetallesOpen" (click)="closeDetailsModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <div class="modal-title">{{ selectedConglomerado?.id }}</div>
         <button class="close-button" (click)="closeDetailsModal()">&times;</button>
@@ -242,14 +260,35 @@
       </div>
       
       <div class="divider"></div>
-      <div class="modal-section">
-        <h3>Mapa de Subparcelas</h3>
-        <div #mapContainer id="map-container">
-          <div #mapElement id="map"></div>
-          <button id="calculateAreaBtn" class="floating-button" (click)="toggleAreaCalculator()">
-            <i class="fas fa-calculator"></i> {{ areaCalculatorOpen ? 'OCULTAR CALCULADORA' : 'CALCULAR ÁREA' }}
-          </button>
-        </div>
+        <div class="modal-section">
+          <h3>Mapa de Subparcelas</h3>
+          <div #mapContainer id="map-container">
+              <div #mapElement id="map"></div>
+              
+              <!-- Controles de área (actualizados) -->
+              <div id="area-controls" [style.display]="areaCalculatorVisible ? 'block' : 'none'">
+                  <div style="display: flex; gap: 5px; margin-bottom: 10px; padding-top: 30px;">
+                    <button (click)="enableAreaDrawing()" class="action-button" style="flex: 1;">
+                      <i class="fas fa-draw-polygon"></i> Dibujar
+                    </button>
+                    <button (click)="clearAreaDrawing()" class="action-button reject-button">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                  
+                  <div id="mouse-coordinates"></div>
+                  
+                  
+                  <div id="coordinates-list" #coordinatesList></div>
+                  
+                  <div id="area-result" style="font-weight: bold; margin-top: 10px; padding: 8px; 
+                            background-color: #f1f8e9; border-radius: 4px; border-left: 3px solid #4caf50;"></div>
+              </div>
+              
+              <button class="floating-button" (click)="toggleAreaCalculator()">
+                  <i class="fas fa-calculator"></i> CALCULAR ÁREA
+              </button>
+          </div>
       </div>
       
       <div class="divider"></div>
